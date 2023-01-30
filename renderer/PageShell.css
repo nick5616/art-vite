@@ -1,0 +1,27 @@
+/* This CSS is common to all pages */
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #080808;
+  color: #eee;
+
+}
+
+a:visited{
+  color: #e9e9e9;
+}
+a {
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+.navitem {
+  padding: 3px 10px;
+}
+.navitem.is-active {
+  background-color: red;
+}
