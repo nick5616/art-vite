@@ -1,5 +1,7 @@
 body {
-    background: url('../../art/Untitled_Artwork 1.jpg');
+    background: radial-gradient(rgba(270, 22, 270, 0.4), rgba(270, 30, 30, 0.4)), url('../../art/Untitled_Artwork1.jpg');
+    background-size: contain;
 }
 .page {
+
 }

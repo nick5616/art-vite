@@ -1,25 +1,37 @@
 .entryContainer {
     background-color: #e883c6;
-    border-left: 4px solid #fafafa;
-    border-top: 4px solid #fafafa;
+    
+    width: fit-content;
 
-    border-right: 16px solid #fafafa;
-    border-bottom: 16px solid #fafafa;
-
-
-    border-radius: 25px;
+    border-radius: 15px;
     margin-top: 10px; 
     margin-bottom: 25px;
-    padding: 25px;
+    padding: 15px;
+    border: 1px solid hsl(319, 87%, 80%);
 }
 .description {
     display: flex;
+    margin-bottom: 15px;
+    margin-left: 15px;
+    padding: 15px;
 }
 .descriptionLabel {
     rotate: 20deg;
-    color: #af0376;
     font-size: larger;
 }
 .descriptionText {
     margin-top: 15px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.entryTitle {
+    align-content: center;
+    align-self: center;
+    text-align: center;
+}
+.entryDate {
+    margin-bottom: 30px;
+    margin-left: 15px;
+
 }
