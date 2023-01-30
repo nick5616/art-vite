@@ -7,7 +7,14 @@ export function Entry(props: {
 }): JSX.Element {
   return (
     <div className="entryContainer">
-      <div className="descriptionText">{props.description}</div>
+      <img src={`/art/${props.mediaName}`}></img>
+      <div className="description">
+        <div className="descriptionText">
+          {" "}
+          <span className="descriptionLabel">Description</span>{" "}
+          {props.description}
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 .entryContainer {
-    background-color: blue;
+    background-color: #e883c6;
     border-left: 4px solid #fafafa;
     border-top: 4px solid #fafafa;
 
@@ -9,9 +9,17 @@
 
     border-radius: 25px;
     margin-top: 10px; 
+    margin-bottom: 25px;
     padding: 25px;
 }
-
+.description {
+    display: flex;
+}
+.descriptionLabel {
+    rotate: 20deg;
+    color: #af0376;
+    font-size: larger;
+}
 .descriptionText {
     margin-top: 15px;
 }
