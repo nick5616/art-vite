@@ -1,9 +1,9 @@
 
 
 .introduction-container {
-    background-color: hsl(320, 85, 85);
     padding: 10x;
     border-radius: 25px;
-    border: hsl(320, 85, 25);
+    margin-top: 25%;
+    margin-bottom: 30%;
 }
 
