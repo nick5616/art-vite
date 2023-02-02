@@ -1,7 +1,9 @@
 import React from "react";
 import { Entry } from "../../components/Entry";
-import { Introduction } from "../../components/Introduction";
 import "./code.css";
+
+import { Vibe } from "../../components/Entry";
+import { Introduction } from "../../components/Introduction";
 
 export { Page };
 
