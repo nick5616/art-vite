@@ -1,9 +1,30 @@
-
-
 .introduction-container {
-    padding: 10x;
     border-radius: 25px;
-    margin-top: 25%;
-    margin-bottom: 30%;
+
+    background: #eeeeee;
+
+    padding: 20px;
+
+    border-radius: 20px;
+    border-bottom-left-radius: 0px;
 }
 
+.page-view {
+    flex-direction: row;
+    align-items: center;
+    display: inline-block;
+    width: 100%;
+    height: 100vh;
+}
+
+.horizontal-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.vertical-stack {
+    display: flex;
+    flex-direction: row;
+}

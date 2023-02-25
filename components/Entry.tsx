@@ -1,37 +1,53 @@
 import React from "react";
+import { Theme, Vibe } from "../models";
 import "./styles/entry.css";
 
 export function Entry(props: {
-  description: string;
-  mediaName: string;
-  title: string;
-  date?: string;
-  primary?: string;
-  background?: string;
-  color?: string;
+    description: string;
+    mediaName: string;
+    title: string;
+    date?: string;
+    primary?: string;
+    vibe: Vibe;
 }): JSX.Element {
-  return (
-    <div
-      className="entryContainer"
-      style={{ backgroundColor: props.background, border: props.color }}
-    >
-      <h1 className="entryTitle" style={{ color: props.color }}>
-        {props.title}
-      </h1>
-      <img src={`/art/${props.mediaName}`}></img>
-      <div className="description">
-        <div className="descriptionText" style={{ color: props.color }}>
-          {" "}
-          <span className="descriptionLabel">Description</span>{" "}
-          {props.description}
+    const theme: Theme = {
+        backgroundColor: "black",
+        color: "white",
+        border: "1px solid",
+    };
+    return (
+        <div
+            className="entryContainer"
+            style={{
+                backgroundColor: theme.backgroundColor,
+                border: theme.border,
+            }}
+        >
+            <h1 className="entryTitle" style={{ color: theme.color }}>
+                "{props.title}"
+            </h1>
+            <img
+                style={{ maxWidth: "65vw" }}
+                src={`/art/${props.mediaName}`}
+            ></img>
+            <div className="description">
+                <div
+                    className="descriptionText"
+                    style={{
+                        color: theme.color,
+                        maxWidth: "65vw",
+                    }}
+                >
+                    <h2 className="descriptionLabel">Description</h2>
+                    {props.description}
+                </div>
+            </div>
+            <hr></hr>
+            {props?.date && (
+                <div className="entryDate" style={{ color: theme.color }}>
+                    Finished: {props.date}
+                </div>
+            )}
         </div>
-      </div>
-      <br></br>
-      {props?.date && (
-        <div className="entryDate" style={{ color: props.color }}>
-          Finished: {props.date}
-        </div>
-      )}
-    </div>
-  );
+    );
 }
