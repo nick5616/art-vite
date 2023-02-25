@@ -1,23 +1,20 @@
 .entryContainer {
     background-color: #e883c6;
-    
+
     width: fit-content;
 
     border-radius: 15px;
-    margin-top: 10px; 
+    margin-top: 10px;
     margin-bottom: 25px;
     padding: 15px;
     border: 1px solid hsl(319, 87%, 80%);
 }
 .description {
-    display: flex;
     margin-bottom: 15px;
-    margin-left: 15px;
-    padding: 15px;
+    white-space: pre-wrap;
 }
 .descriptionLabel {
-    rotate: 20deg;
-    font-size: larger;
+    font-size: medium;
 }
 .descriptionText {
     margin-top: 15px;
@@ -33,5 +30,4 @@
 .entryDate {
     margin-bottom: 30px;
     margin-left: 15px;
-
 }
