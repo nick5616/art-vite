@@ -22,9 +22,6 @@ body {
         sans-serif;
 }
 
-a:visited {
-    color: rgb(40, 230, 90);
-}
 a {
     color: black;
 }
@@ -35,7 +32,4 @@ a {
 
 .navitem {
     padding: 3px 10px;
-}
-.navitem.is-active {
-    background-color: #c44db2;
 }

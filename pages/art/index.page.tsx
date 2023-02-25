@@ -11,6 +11,7 @@ function Page() {
         <>
             <div className="page">
                 <Introduction></Introduction>
+                <hr></hr>
                 <Entry
                     title="Furry guy in Bliss"
                     description='This is a drawing of a character from a popular video game called "League of Legends". Drawn on iPad 2018 apple pencil generation 1'
@@ -19,8 +20,7 @@ function Page() {
                 ></Entry>
                 <Entry
                     title="Angry Bird in real life"
-                    description="
-        Angry bird. I didn't draw this. It's actually a real bird. You know, they say art imitates life. This is demonstrating the converse"
+                    description="Angry bird. I didn't draw this. It's actually a real bird. You know, they say art imitates life. This is demonstrating the converse"
                     mediaName="angrybird.png"
                     vibe={Vibe.DARK_RED}
                 ></Entry>

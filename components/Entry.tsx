@@ -11,8 +11,8 @@ export function Entry(props: {
     vibe: Vibe;
 }): JSX.Element {
     const theme: Theme = {
-        backgroundColor: "black",
-        color: "white",
+        backgroundColor: "inherit",
+        color: "inherit",
         border: "1px solid",
     };
     return (
@@ -23,8 +23,8 @@ export function Entry(props: {
                 border: theme.border,
             }}
         >
-            <h1 className="entryTitle" style={{ color: theme.color }}>
-                "{props.title}"
+            <h1 className="entryTitle serif" style={{ color: theme.color }}>
+                {props.title}
             </h1>
             <img
                 style={{ maxWidth: "65vw" }}
