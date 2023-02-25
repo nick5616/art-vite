@@ -19,8 +19,7 @@ function Page() {
                 ></Entry>
                 <Entry
                     title="Angry Bird in real life"
-                    description="
-        Angry bird. I didn't draw this. It's actually a real bird. You know, they say art imitates life. This is demonstrating the converse"
+                    description="Angry bird. I didn't draw this. It's actually a real bird. You know, they say art imitates life. This is demonstrating the converse"
                     mediaName="angrybird.png"
                     vibe={Vibe.DARK_RED}
                 ></Entry>
