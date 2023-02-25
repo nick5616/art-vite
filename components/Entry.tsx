@@ -10,31 +10,34 @@ export function Entry(props: {
     primary?: string;
     vibe: Vibe;
 }): JSX.Element {
-    const theme: Theme = {
-        backgroundColor: "black",
-        color: "white",
+    const defaultTheme: Theme = {
+        backgroundColor: "inherit",
+        color: "inherit",
         border: "1px solid",
     };
     return (
         <div
             className="entryContainer"
             style={{
-                backgroundColor: theme.backgroundColor,
-                border: theme.border,
+                backgroundColor: defaultTheme.backgroundColor,
+                border: defaultTheme.border,
             }}
         >
-            <h1 className="entryTitle" style={{ color: theme.color }}>
+            <h1
+                className="entryTitle serif"
+                style={{ color: defaultTheme.color }}
+            >
                 "{props.title}"
             </h1>
             <img
-                style={{ maxWidth: "65vw" }}
+                style={{ width: "65vw" }}
                 src={`/art/${props.mediaName}`}
             ></img>
             <div className="description">
                 <div
                     className="descriptionText"
                     style={{
-                        color: theme.color,
+                        color: defaultTheme.color,
                         maxWidth: "65vw",
                     }}
                 >
@@ -44,7 +47,10 @@ export function Entry(props: {
             </div>
             <hr></hr>
             {props?.date && (
-                <div className="entryDate" style={{ color: theme.color }}>
+                <div
+                    className="entryDate"
+                    style={{ color: defaultTheme.color }}
+                >
                     Finished: {props.date}
                 </div>
             )}
