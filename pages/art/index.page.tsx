@@ -49,7 +49,7 @@ function Page() {
                 ></Entry>
                 <Entry
                     title="Zelda"
-                    description="Portrait of a Character from The Legend of Zelda. Zelda is the weilder of the sword that seals darkness. The one on his back. "
+                    description="Portrait of a Character from The Legend of Zelda. Zelda is the wielder of the sword that seals darkness. The one on his back. "
                     mediaName="Untitled_Artwork9.jpg"
                     date="July, 2022"
                     vibe={Vibe.DARK_RED}
