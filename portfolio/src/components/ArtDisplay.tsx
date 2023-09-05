@@ -1,10 +1,6 @@
 import * as React from "react";
 import { ArtEntry } from "../models";
-import {
-    getRandomBackgroundColorFromPalette,
-    getRandomColorFromPalette,
-    getThemeFromVibe,
-} from "../theme";
+import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 import { ArtInfoCard } from "./ArtInfoCard";
 
 export function ArtDisplay(props: { entries: ArtEntry[] }) {
@@ -15,7 +11,10 @@ export function ArtDisplay(props: { entries: ArtEntry[] }) {
     // const foreground = getRandomColorFromPalette(
     //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
     // );
-    const paletteIndex = 0;
+    const paletteIndex = generateRandomNumberExcluding(
+        [],
+        getThemeFromVibe(props.entries[selectedIndex].vibe).palette.length,
+    );
     const mediaBackgroundColor = getThemeFromVibe(
         props.entries[selectedIndex].vibe,
     ).palette[paletteIndex].backgroundColor;
