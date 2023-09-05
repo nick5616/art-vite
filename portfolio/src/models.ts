@@ -1,3 +1,23 @@
+export interface ArtEntry {
+    description: string;
+    mediaName: string;
+    title: string;
+    date?: string;
+    primary?: string;
+    vibe: Vibe;
+    index: number;
+}
+
+export interface EntryDisplayProps {
+    description: string;
+    mediaName: string;
+    title: string;
+    date?: string;
+    primary?: string;
+    vibe: Vibe;
+    verticalOffsetPx: number;
+}
+
 export enum Vibe {
     DARK_RED,
     ITS_CORN,
@@ -5,12 +25,13 @@ export enum Vibe {
     BABY_BLUE,
     PRUSSIAN_BLUE,
     DEEP_PURPLE,
+    VANILLA,
 }
 
 export interface RgbColor {
-    red: RgbColorPigment;
-    green: RgbColorPigment;
-    blue: RgbColorPigment;
+    red: number;
+    green: number;
+    blue: number;
 }
 
 export interface HslColor {
@@ -19,13 +40,56 @@ export interface HslColor {
     lightness: number;
 }
 
-type RgbColorPigment = RgbComponentValue;
+// type RgbColorPigment = RgbComponentValue;
 
-export interface Theme {
+export enum ColorScheme {
+    MONOCHROMATIC = "MONOCHROMATIC",
+    ANALOGOUS = "ANALOGOUS",
+    COMPLEMENTARY = "COMPLEMENTARY",
+    SPLIT_COMPLEMENTARY = "SPLIT-COMPLEMENTARY",
+    TRIADIC = "TRIADIC",
+    SQUARE = "SQUARE",
+    TETRADIC = "TETRADIC",
+}
+
+export interface ColorPair {
     backgroundColor: string;
     color: string;
-    border: string;
 }
+
+export interface Theme {
+    scheme: ColorScheme;
+    border?: string;
+    palette: ColorPair[];
+}
+
+// export interface MonochromaticTheme extends Theme {
+//     type: ThemeType.MONOCHROMATIC;
+// }
+
+// export interface AnalogousTheme extends Theme {
+//     type: ThemeType.ANALOGOUS;
+// }
+
+// export interface ComplementaryTheme extends Theme {
+//     type: ThemeType.COMPLEMTENTARY;
+// }
+
+// export interface SplitComplementaryTheme extends Theme {
+//     type: ThemeType.SPLIT_COMPLEMENTARY;
+// }
+
+// export interface TriadicComplementaryTheme extends Theme {
+//     type: ThemeType.TRIADIC;
+// }
+
+// export interface SquareComplementaryTheme extends Theme {
+//     type: ThemeType.SQUARE;
+// }
+
+// export interface RectangularComplementaryTheme extends Theme {
+//     type: ThemeType.RECTANGLE;
+// }
 
 /***********===========+++++++++++++++---------------*************================++++++++++++++++---------------*******
  * ====================================================================================================================*
@@ -339,3 +403,56 @@ export function getIntegerNumberFromRgbInputValue(
 export function handleRgbComponentInput(num: string): RgbComponentValue {
     return getIntegerNumberFromRgbInputValue(num);
 }
+
+export interface RgbColor {
+    red: number;
+    green: number;
+    blue: number;
+}
+
+export interface HslColor {
+    hue: number;
+    saturation: number;
+    lightness: number;
+}
+
+// type RgbColorPigment = RgbComponentValue;
+
+export interface ColorPair {
+    backgroundColor: string;
+    color: string;
+}
+
+export interface Theme {
+    scheme: ColorScheme;
+    border?: string;
+    palette: ColorPair[];
+}
+
+// export interface MonochromaticTheme extends Theme {
+//     type: ThemeType.MONOCHROMATIC;
+// }
+
+// export interface AnalogousTheme extends Theme {
+//     type: ThemeType.ANALOGOUS;
+// }
+
+// export interface ComplementaryTheme extends Theme {
+//     type: ThemeType.COMPLEMTENTARY;
+// }
+
+// export interface SplitComplementaryTheme extends Theme {
+//     type: ThemeType.SPLIT_COMPLEMENTARY;
+// }
+
+// export interface TriadicComplementaryTheme extends Theme {
+//     type: ThemeType.TRIADIC;
+// }
+
+// export interface SquareComplementaryTheme extends Theme {
+//     type: ThemeType.SQUARE;
+// }
+
+// export interface RectangularComplementaryTheme extends Theme {
+//     type: ThemeType.RECTANGLE;
+// }
