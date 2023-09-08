@@ -14,12 +14,7 @@ export function Introduction(props: {
     });
 
     return (
-        <div
-            className="page-view"
-            ref={ref}
-            style={{ borderLeft: "3px solid red" }}
-        >
-            <h1>Page height {height}</h1>
+        <div className="page-view" ref={ref}>
             <div className="introduction-container">
                 <h1 className="serif heading">
                     Hi! I'm Nick, but you can call me iPad baby

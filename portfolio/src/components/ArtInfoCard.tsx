@@ -1,59 +1,57 @@
-import * as e from "express";
 import * as React from "react";
-import { ColorScheme, Vibe } from "../models";
-import {
-    generateRandomNumberExcluding,
-    getNumberOfColorsInScheme,
-    getThemeFromVibe,
-} from "../theme";
+import { ArtTitle } from "./ArtTitle";
+import { ExpandableDescription } from "./ExpandableDescription";
 
 export function ArtInfoCard(props: {
+    index: number;
+    onUpClicked: (index: number) => void;
+    onDownClicked: (index: number) => void;
+
     title: string;
     description: string;
-    index: number;
-    selected: boolean;
-    vibe: Vibe;
-    paletteIndex: number;
-    onClick: (index: number) => void;
-}) {
-    const theme = getThemeFromVibe(props.vibe);
-    console.log("🐽 I smell a truffle theme!!", theme);
-    // const randomPaletteIndex = generateRandomNumberExcluding(
-    //     [props.paletteIndex],
-    //     theme.palette.length - 1,
-    // );
-    const isMonochromatic = theme.palette.length === 1;
+    onCollapseToggled: () => void;
 
-    const randomPaletteIndex = isMonochromatic
-        ? 0
-        : generateRandomNumberExcluding(
-              [props.paletteIndex],
-              theme.palette.length,
-          );
-    console.log("PALETTE INDEX", randomPaletteIndex);
-    let backgroundColor = props.selected ? theme.palette[0].color : "inherit";
-    let color = props.selected ? theme.palette[0].backgroundColor : "inherit";
-    if (!isMonochromatic) {
-        backgroundColor = props.selected
-            ? theme.palette[randomPaletteIndex].backgroundColor
-            : "inherit";
-        color = props.selected
-            ? theme.palette[randomPaletteIndex].color
-            : "inherit";
-    }
-    console.log("bg c", backgroundColor, color);
+    date?: string;
+    selected: boolean;
+}) {
     return (
-        <div
-            style={{
-                backgroundColor,
-                color,
-            }}
-            onClick={() => {
-                props.onClick(props.index);
-            }}
-        >
-            <h1>{props.title}</h1>
-            <p>{props.description}</p>
+        <div style={{ display: "flex" }}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    paddingRight: "20px",
+                }}
+            >
+                <div>
+                    <div onClick={() => props.onUpClicked(props.index)}>Up</div>
+                    <div onClick={() => props.onDownClicked(props.index)}>
+                        Down
+                    </div>
+                </div>
+            </div>
+            <ArtTitle title={props.title}></ArtTitle>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    overflow: "visible",
+                }}
+            >
+                <div style={{}}>
+                    <ExpandableDescription
+                        description={props.description}
+                        expandRequested={() => {
+                            console.log("expand requested");
+                            props.onCollapseToggled();
+                        }}
+                        selected={props.selected}
+                    ></ExpandableDescription>
+                </div>
+                <div style={{ float: "right" }}>
+                    {props.date ? <p>Created on {props.date}</p> : <></>}
+                </div>
+            </div>
         </div>
     );
 }

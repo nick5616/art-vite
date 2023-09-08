@@ -1,9 +1,12 @@
 import * as React from "react";
-import { ArtEntry } from "../models";
+import { ArtEntry, Vibe } from "../models";
 import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
-import { ArtInfoCard } from "./ArtInfoCard";
+import { ArtInfoCardController } from "./ArtInfoCardController";
 
-export function ArtDisplay(props: { entries: ArtEntry[] }) {
+export function ArtDisplay(props: {
+    entries: ArtEntry[];
+    onArtChanged: (vibe: Vibe, selectedIndex: number) => void;
+}) {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
     // const mediaBackgroundColor = getRandomBackgroundColorFromPalette(
     //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
@@ -11,9 +14,15 @@ export function ArtDisplay(props: { entries: ArtEntry[] }) {
     // const foreground = getRandomColorFromPalette(
     //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
     // );
+
+    React.useEffect(() => {
+        const vibe = props.entries[selectedIndex].vibe;
+        props.onArtChanged(vibe, paletteIndex);
+    }, [selectedIndex, setSelectedIndex]);
+    const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
     const paletteIndex = generateRandomNumberExcluding(
         [],
-        getThemeFromVibe(props.entries[selectedIndex].vibe).palette.length,
+        theme.palette.length,
     );
     const mediaBackgroundColor = getThemeFromVibe(
         props.entries[selectedIndex].vibe,
@@ -28,15 +37,15 @@ export function ArtDisplay(props: { entries: ArtEntry[] }) {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                width: "100%",
+                width: "auto",
                 maxHeight: "95vh",
-                backgroundColor: "#ddddff",
+                backgroundColor: mediaBackgroundColor,
+                borderRadius: "10px",
             }}
         >
             <>
                 <div
                     style={{
-                        border: "1px solid red",
                         width: "50%",
                         overflow: "auto",
                         backgroundColor: mediaBackgroundColor,
@@ -46,27 +55,35 @@ export function ArtDisplay(props: { entries: ArtEntry[] }) {
                     {props.entries.map((entry, key) => {
                         console.log("entry!!", entry);
                         return (
-                            <ArtInfoCard
+                            <ArtInfoCardController
                                 title={entry.title}
                                 description={entry.description}
                                 index={entry.index}
-                                onClick={(index: number) =>
+                                onCardClicked={(index: number) =>
                                     setSelectedIndex(index)
                                 }
+                                onUpClicked={(index: number) =>
+                                    setSelectedIndex(index - 1)
+                                }
+                                onDownClicked={(index: number) => {
+                                    setSelectedIndex(index + 1);
+                                }}
                                 selected={selectedIndex === entry.index}
                                 vibe={entry.vibe}
                                 key={key}
                                 paletteIndex={paletteIndex}
-                            ></ArtInfoCard>
+                                date={entry.date}
+                            ></ArtInfoCardController>
                         );
                     })}
                 </div>
                 <div
                     style={{
-                        border: "1px solid green",
                         width: "50%",
                         backgroundColor: mediaBackgroundColor,
                         color: foreground,
+                        borderRadius: "10px",
+                        // padding: "5px",
                     }}
                 >
                     <img

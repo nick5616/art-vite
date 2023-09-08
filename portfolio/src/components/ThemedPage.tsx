@@ -3,26 +3,31 @@ import { useEffect, useState } from "react";
 import { Vibe } from "../models";
 import useWindowDimensions from "../hooks/useWindowDimenstions";
 import { ArtEntry } from "../models";
-import { getThemeFromVibe } from "../theme";
+import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 import { ArtDisplay } from "./ArtDisplay";
 import { Entry } from "./Entry";
 import { Introduction } from "./Introduction";
+import { reduceEachLeadingCommentRange } from "typescript";
 
 function fetchEntriesFromJSONMock(): ArtEntry[] {
     const data = [
         {
             title: "Furry guy in bliss",
-            description: "This is a furry guy from the game League of Legends",
+            description:
+                "This is a furry guy from the game League of Legends. This is a furry guy from the game League of Legends. This is a furry guy from the game League of Legends. This is a furry guy from the game League of Legends. This is a furry guy from the game League of Legends. This is a furry guy from the game League of Legends",
             mediaName: "Untitled_Artwork5.jpg",
             vibe: Vibe.DARK_RED,
             index: 0,
+            date: "01/04/2023",
         },
         {
             title: "Picknick",
-            description: "Mackbook",
+            description:
+                "Mackbook. Mackbook. Mackbook. Mk Mackbook ckbook. Mackbo",
             mediaName: "Untitled_Artwork8.jpg",
             vibe: Vibe.BABY_BLUE,
             index: 1,
+            date: "10/20/2022",
         },
         {
             title: "Link",
@@ -30,6 +35,7 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             mediaName: "Untitled_Artwork9.jpg",
             vibe: Vibe.DEEP_PURPLE,
             index: 2,
+            date: "08/12/2022",
         },
         {
             title: "The Bite of '87",
@@ -56,7 +62,8 @@ export function ThemedPage(): JSX.Element {
     );
     const { height, width } = useWindowDimensions();
     const [introHeight, setIntroHeight] = useState(0);
-    let pageVibe = Vibe.VANILLA;
+    const [pageVibe, setPageVibe] = useState(Vibe.VANILLA);
+    const [chosenPaletteIndex, setChosenPaletteIndex] = useState<number>(0);
     console.log("introHeight", introHeight);
     console.log(height, width);
     //const [scrollPosition, setScrollPosition] = React.useState(0);
@@ -81,19 +88,42 @@ export function ThemedPage(): JSX.Element {
     // }
 
     const pageTheme = getThemeFromVibe(pageVibe);
+    const chosenIndex = generateRandomNumberExcluding(
+        [],
+        pageTheme.palette.length,
+    );
     console.log("page vibe", pageVibe);
+    const isMonochromatic = pageTheme.palette.length === 1;
+    const backgroundColor = isMonochromatic
+        ? pageTheme.palette[0].color
+        : pageTheme.palette[chosenPaletteIndex].backgroundColor;
+    const foreground = isMonochromatic
+        ? pageTheme.palette[0].backgroundColor
+        : pageTheme.palette[chosenPaletteIndex].color;
+
     return (
         <div
             style={{
-                borderLeft: "2px solid green",
-                background: pageTheme.palette[0].backgroundColor,
+                background: backgroundColor,
+                color: foreground,
             }}
         >
             {/* <div style={{ position: "sticky", top: "20px" }}>
                 {scrollPosition}
             </div> */}
             <Introduction introductionHeight={setIntroHeight}></Introduction>
-            <ArtDisplay entries={entries}></ArtDisplay>
+            <ArtDisplay
+                entries={entries}
+                onArtChanged={(vibe, paletteIndex) => {
+                    console.log(
+                        "art changed. vibe paletteIndex",
+                        vibe,
+                        paletteIndex,
+                    );
+                    setPageVibe(vibe);
+                    setChosenPaletteIndex(paletteIndex);
+                }}
+            ></ArtDisplay>
             <div>
                 {entries.map((entry: ArtEntry, key) => {
                     // console.log("entry", entry);
