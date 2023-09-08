@@ -5,7 +5,7 @@ import * as React from "react";
 
 function App() {
     return (
-        <div style={{ borderLeft: "2px solid blue" }}>
+        <div style={{ width: "auto" }}>
             <ThemedPage></ThemedPage>
         </div>
     );
