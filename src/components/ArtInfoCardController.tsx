@@ -50,7 +50,7 @@ export function ArtInfoCardController(props: {
     //         ? theme.palette[randomPaletteIndex].color
     //         : "inherit";
     // }
-    const border = props.selected ? "1px solid " + color : "none";
+    // const border = props.selected ? "1px solid " + color : "none";
 
     return (
         <div
@@ -58,13 +58,11 @@ export function ArtInfoCardController(props: {
                 color,
                 backgroundColor,
                 padding: "10px",
-                border,
                 margin: "0 10px",
                 marginLeft: "50px",
 
                 borderRadius: "10px",
                 display: "flex",
-                overflow: "visible",
             }}
             onClick={() => {
                 props.onCardClicked(props.index);
