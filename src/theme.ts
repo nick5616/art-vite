@@ -1,4 +1,3 @@
-import { time } from "console";
 import {
     ColorPair,
     ColorScheme,
@@ -332,8 +331,8 @@ function satisfactoryContrastRatio(
     rgbColor1: RgbColor,
     rgbColor2: RgbColor,
 ): boolean {
-    const y1 = relativeLuminance(rgbColor1);
-    const y2 = relativeLuminance(rgbColor2);
+    // const y1 = relativeLuminance(rgbColor1);
+    // const y2 = relativeLuminance(rgbColor2);
     return (
         contrastRatio(
             relativeLuminance(rgbColor1),

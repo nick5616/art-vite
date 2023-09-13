@@ -1,14 +1,8 @@
 import * as React from "react";
-import { ColorScheme, Vibe } from "../models";
-import {
-    generateRandomNumberExcluding,
-    getNumberOfColorsInScheme,
-    getThemeFromVibe,
-} from "../theme";
+import { Vibe } from "../models";
+import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 import { ArtInfoCard } from "./ArtInfoCard";
 import { ArtInfoCardExpanded } from "./ArtInfoCardExpanded";
-import { ArtTitle } from "./ArtTitle";
-import { ExpandableDescription } from "./ExpandableDescription";
 
 export function ArtInfoCardController(props: {
     title: string;

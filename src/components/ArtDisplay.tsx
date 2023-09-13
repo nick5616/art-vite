@@ -17,9 +17,6 @@ export function ArtDisplay(props: {
     // const foreground = getRandomColorFromPalette(
     //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
     // );
-    function onUpClicked(index: number) {
-        setSelectedIndex(index + 1);
-    }
 
     React.useEffect(() => {
         const vibe = props.entries[selectedIndex].vibe;

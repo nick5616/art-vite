@@ -1,13 +1,10 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { Theme, Vibe } from "../models";
-import useWindowDimensions from "../hooks/useWindowDimenstions";
 import { ArtEntry } from "../models";
-import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
+import { getThemeFromVibe } from "../theme";
 import { ArtDisplay } from "./ArtDisplay";
-import { Entry } from "./Entry";
 import { Introduction } from "./Introduction";
-import { reduceEachLeadingCommentRange } from "typescript";
 
 function fetchEntriesFromJSONMock(): ArtEntry[] {
     const data = [
@@ -59,27 +56,25 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
 export function ThemedPage(props: {
     onPageThemeDetermined: (theme: Theme) => void;
 }): JSX.Element {
-    const [entries, setEntries] = useState<ArtEntry[]>(
-        fetchEntriesFromJSONMock(),
-    );
+    const [entries] = useState<ArtEntry[]>(fetchEntriesFromJSONMock());
     const [pageVibe, setPageVibe] = useState(Vibe.VANILLA);
     const [chosenPaletteIndex, setChosenPaletteIndex] = useState<number>(0);
     const pageTheme = getThemeFromVibe(pageVibe);
     useEffect(() => {
         props.onPageThemeDetermined(pageTheme);
     }, [pageVibe, setPageVibe]);
-    const chosenIndex = generateRandomNumberExcluding(
-        [],
-        pageTheme.palette.length,
-    );
+    // const chosenIndex = generateRandomNumberExcluding(
+    //     [],
+    //     pageTheme.palette.length,
+    // );
     console.log("page vibe", pageVibe);
-    const isMonochromatic = pageTheme.palette.length === 1;
-    const backgroundColor = isMonochromatic
-        ? pageTheme.palette[0].color
-        : pageTheme.palette[chosenPaletteIndex].backgroundColor;
-    const foreground = isMonochromatic
-        ? pageTheme.palette[0].backgroundColor
-        : pageTheme.palette[chosenPaletteIndex].color;
+    // const isMonochromatic = pageTheme.palette.length === 1;
+    // const backgroundColor = isMonochromatic
+    //     ? pageTheme.palette[0].color
+    //     : pageTheme.palette[chosenPaletteIndex].backgroundColor;
+    // const foreground = isMonochromatic
+    //     ? pageTheme.palette[0].backgroundColor
+    //     : pageTheme.palette[chosenPaletteIndex].color;
 
     return (
         <div

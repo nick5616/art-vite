@@ -1,10 +1,5 @@
-import { useReducer, useState } from "react";
-import { ColorScheme, Theme, Vibe } from "../models";
-import {
-    getColorSchemeFromVibe,
-    getThemeFromVibe,
-    ThemeAction,
-} from "../theme";
+import { Theme } from "../models";
+import { getThemeFromVibe, ThemeAction } from "../theme";
 export function reducer(state: Theme, action: ThemeAction) {
     console.log("state", state);
     console.log("action", action);

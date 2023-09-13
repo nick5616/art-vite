@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
 import { Theme } from "../models";
 import "./styles/entry.css";
 
@@ -18,7 +17,6 @@ export function MonochromaticEntry({
     date,
     theme,
 }: EntryProps): JSX.Element {
-    const imageRef = React.createRef();
     return (
         <div
             className="entryContainer"

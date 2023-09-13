@@ -4,9 +4,7 @@ import { ThemedPage } from "./components/ThemedPage";
 import * as React from "react";
 import { Theme, Vibe } from "./models";
 import {
-    getRandomBackgroundColorFromPalette,
     getRandomBackgroundColorPairFromPalette,
-    getRandomColorFromPalette,
     getThemeFromVibe,
 } from "./theme";
 

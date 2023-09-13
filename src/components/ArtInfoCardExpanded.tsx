@@ -1,10 +1,6 @@
 import * as React from "react";
-import { ColorScheme, Vibe } from "../models";
-import {
-    generateRandomNumberExcluding,
-    getNumberOfColorsInScheme,
-    getThemeFromVibe,
-} from "../theme";
+import { Vibe } from "../models";
+import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 
 export function ArtInfoCardExpanded(props: {
     title: string;

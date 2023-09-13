@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ColorScheme, Theme, Vibe } from "../models";
+import { Vibe } from "../models";
 import { getNumberOfColorsInScheme, getThemeFromVibe } from "../theme";
 import { BichromaticEntry } from "./BichromaticEntry";
 import { MonochromaticEntry } from "./MonochromaticEntry";
