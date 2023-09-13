@@ -609,7 +609,7 @@ export function getThemeFromVibe(vibe: Vibe): Theme {
             scheme: ColorScheme.MONOCHROMATIC,
             palette: [
                 {
-                    colorPair: { backgroundColor: "white", color: "black" },
+                    colorPair: { backgroundColor: "#fafafa", color: "#080808" },
                     isAccessible: true,
                 },
             ],
