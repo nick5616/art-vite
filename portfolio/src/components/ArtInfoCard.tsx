@@ -15,7 +15,7 @@ export function ArtInfoCard(props: {
     selected: boolean;
 }) {
     return (
-        <div style={{ display: "flex" }}>
+        <div style={{ display: "flex", width: "100%" }}>
             <div
                 style={{
                     display: "flex",
@@ -35,6 +35,7 @@ export function ArtInfoCard(props: {
                 style={{
                     display: "flex",
                     alignItems: "center",
+                    width: "100%",
                 }}
             >
                 <div style={{}}>
@@ -46,7 +47,7 @@ export function ArtInfoCard(props: {
                         selected={props.selected}
                     ></ExpandableDescription>
                 </div>
-                <div style={{ float: "right" }}>
+                <div style={{ margin: "0 0 0 auto" }}>
                     {props.date ? <p>Created on {props.date}</p> : <></>}
                 </div>
             </div>
