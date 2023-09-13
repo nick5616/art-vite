@@ -3,6 +3,11 @@ import { reducer } from "../hooks/useTheme";
 import { ArtEntry, Vibe } from "../models";
 import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 import { ArtInfoCardController } from "./ArtInfoCardController";
+import imgUrl from "../../art/Untitled_Artwork5.jpg";
+import imgUrl2 from "../../art/Untitled_Artwork8.jpg";
+import imgUrl3 from "../../art/Untitled_Artwork9.jpg";
+import imgUrl4 from "../../art/Untitled_Artwork2.jpg";
+import imgUrl5 from "../../art/Untitled_Artwork3.jpg";
 
 export function ArtDisplay(props: {
     entries: ArtEntry[];
@@ -27,6 +32,7 @@ export function ArtDisplay(props: {
     const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
     const [state, dispatch] = React.useReducer(reducer, theme);
     console.log("state", state);
+    const imagePathArray = [imgUrl, imgUrl2, imgUrl3, imgUrl4, imgUrl5];
     const paletteIndex = generateRandomNumberExcluding(
         [],
         theme.palette.length,
@@ -100,7 +106,7 @@ export function ArtDisplay(props: {
                 >
                     <img
                         style={{ maxWidth: "100%", maxHeight: "93vh" }}
-                        src={`../../art/${props.entries[selectedIndex].mediaName}`}
+                        src={`${imagePathArray[selectedIndex]}`}
                     ></img>
                 </div>
             </>
