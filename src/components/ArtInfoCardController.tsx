@@ -37,10 +37,10 @@ export function ArtInfoCardController(props: {
         randomPaletteIndex,
     );
     let backgroundColor = props.selected
-        ? theme.palette[0].colorPair.color
+        ? theme.palette[randomPaletteIndex].colorPair.color
         : "inherit";
     let color = props.selected
-        ? theme.palette[0].colorPair.backgroundColor
+        ? theme.palette[randomPaletteIndex].colorPair.backgroundColor
         : "inherit";
     // if (!isMonochromatic) {
     //     backgroundColor = props.selected

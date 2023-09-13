@@ -10,6 +10,30 @@ import {
     Vibe,
 } from "./models";
 
+//import Color from "ac-colors";
+
+const RED = 0.2126;
+const GREEN = 0.7152;
+const BLUE = 0.0722;
+
+const GAMMA = 2.4;
+
+function luminance(r: number, g: number, b: number) {
+    var a = [r, g, b].map((v) => {
+        v /= 255;
+        return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, GAMMA);
+    });
+    return a[0] * RED + a[1] * GREEN + a[2] * BLUE;
+}
+
+function contrast(rgb1: RgbColor, rgb2: RgbColor) {
+    var lum1 = luminance(rgb1.red, rgb1.green, rgb1.blue);
+    var lum2 = luminance(rgb2.red, rgb2.green, rgb2.blue);
+    var brightest = Math.max(lum1, lum2);
+    var darkest = Math.min(lum1, lum2);
+    return (brightest + 0.05) / (darkest + 0.05);
+}
+
 const PIGMENT_MODIFICATION_AMOUNT = 2;
 
 export function rgbAsString(color: RgbColor): string {
@@ -343,6 +367,49 @@ function satisfactoryContrastRatio(
     );
 }
 
+export function hslToRgb2(hsl: HslColor): RgbColor {
+    let h = hsl.hue;
+    let s = hsl.saturation;
+    let l = hsl.lightness;
+    // Any nonfinite hsl is reset to 0
+    if (!isFinite(h)) {
+        h = 0;
+    }
+    if (!isFinite(s)) {
+        s = 0;
+    }
+    if (!isFinite(l)) {
+        l = 0;
+    }
+    // Hue has a period of 360deg, if hue is negative, get positive hue
+    // by scaling h to (-360,0) and adding 360
+    h = h < 0 ? (h % 360) + 360 : h;
+    // Normalize saturation and lightness to [0,1], hue [0,6)
+    l /= 100;
+    s /= 100;
+    h /= 60;
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs((h % 2) - 1));
+    const m = l - c / 2;
+    let rgb1;
+    if (h < 1) {
+        rgb1 = [c, x, 0];
+    } else if (h < 2) {
+        rgb1 = [x, c, 0];
+    } else if (h < 3) {
+        rgb1 = [0, c, x];
+    } else if (h < 4) {
+        rgb1 = [0, x, c];
+    } else if (h < 5) {
+        rgb1 = [x, 0, c];
+    } else {
+        rgb1 = [c, 0, x];
+    }
+    // Add zero to prevent signed zeros (force 0 rather than -0)
+    const rgb = rgb1.map((val) => Math.round((val + m) * 255) + 0);
+    return { red: rgb[0], green: rgb[1], blue: rgb[2] };
+}
+
 export function generateAccessibleColorFromBackground(
     backgroundColor: HslColor,
 ): AccessibleHslColor {
@@ -401,16 +468,25 @@ export function generateAccessibleColorFromBackground(
         contrastRatioAcceptableAfterLoop,
     );
     let cr = contrastRatio(
-        relativeLuminance(hslToRgb(color)),
-        relativeLuminance(hslToRgb(backgroundColor)),
+        relativeLuminance(hslToRgb2(color)),
+        relativeLuminance(hslToRgb2(backgroundColor)),
     );
 
+    // const c1 = new Color({
+    //     color: [color.hue, color.lightness, color.saturation],
+    //     type: "hsl",
+    // });
+
+    // let newCr = contrastRatio();
+    let contest = contrast(hslToRgb(color), hslToRgb(backgroundColor));
+    console.log("🤨 CONTEST", contest);
+    console.log("with new rgb algo", cr);
     if (!accessible) {
         throw new Error("could not generate an accessible color scheme");
     }
     return {
         color,
-        isAccessible: contrastRatioAcceptableAfterLoop,
+        isAccessible: cr >= 7,
         contrastRatio: cr,
     };
 }
@@ -432,14 +508,30 @@ export function generateColorPalette(
     for (let n = 0; n < numColors; n++) {
         const backgroundColor = pickBackgroundColor(vibe, n);
         console.log("picked backgroundColor", backgroundColor);
-        const accessibleColor =
+        let accessibleColor =
             generateAccessibleColorFromBackground(backgroundColor);
+        const triedIndeces = [n];
+        while (
+            !accessibleColor.isAccessible &&
+            triedIndeces.length < numColors
+        ) {
+            const index = generateRandomNumberExcluding(
+                triedIndeces,
+                numColors,
+            );
+            accessibleColor = generateAccessibleColorFromBackground(
+                pickBackgroundColor(vibe, index),
+            );
+            triedIndeces.push(index);
+        }
+
         colorPairs.push({
             colorPair: {
                 color: hslToHex(accessibleColor.color),
                 backgroundColor: hslToHex(backgroundColor),
             },
             isAccessible: accessibleColor.isAccessible,
+            contrastRatio: accessibleColor.contrastRatio,
         });
     }
     return colorPairs;
