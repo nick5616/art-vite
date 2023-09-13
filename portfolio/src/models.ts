@@ -19,13 +19,13 @@ export interface EntryDisplayProps {
 }
 
 export enum Vibe {
-    DARK_RED,
-    ITS_CORN,
-    EARTH_DAY_2017,
-    BABY_BLUE,
-    PRUSSIAN_BLUE,
-    DEEP_PURPLE,
-    VANILLA,
+    DARK_RED = "DARK_RED",
+    ITS_CORN = "ITS_CORN",
+    EARTH_DAY_2017 = "EARTH_DAY_2017",
+    BABY_BLUE = "BABY_BLUE",
+    PRUSSIAN_BLUE = "PRUSSIAN_BLUE",
+    DEEP_PURPLE = "DEEP_PURPLE",
+    VANILLA = "VANILLA",
 }
 
 export interface RgbColor {
@@ -425,8 +425,8 @@ export interface ColorPair {
 
 export interface Theme {
     scheme: ColorScheme;
-    border?: string;
     palette: ColorPair[];
+    vibe: Vibe;
 }
 
 // export interface MonochromaticTheme extends Theme {

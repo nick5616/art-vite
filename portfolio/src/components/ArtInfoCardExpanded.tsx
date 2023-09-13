@@ -1,4 +1,3 @@
-import * as e from "express";
 import * as React from "react";
 import { ColorScheme, Vibe } from "../models";
 import {
@@ -33,28 +32,26 @@ export function ArtInfoCardExpanded(props: {
               [props.paletteIndex],
               theme.palette.length,
           );
-    console.log("PALETTE INDEX", randomPaletteIndex);
-    let backgroundColor = props.selected ? theme.palette[0].color : "inherit";
-    let color = props.selected ? theme.palette[0].backgroundColor : "inherit";
-    if (!isMonochromatic) {
-        backgroundColor = props.selected
-            ? theme.palette[randomPaletteIndex].backgroundColor
-            : "inherit";
-        color = props.selected
-            ? theme.palette[randomPaletteIndex].color
-            : "inherit";
-    }
+    // let backgroundColor = props.selected ? theme.palette[0].color : "inherit";
+    // let color = props.selected ? theme.palette[0].backgroundColor : "inherit";
+    // if (!isMonochromatic) {
+    let backgroundColor = props.selected
+        ? theme.palette[randomPaletteIndex].backgroundColor
+        : "inherit";
+    let color = props.selected
+        ? theme.palette[randomPaletteIndex].color
+        : "inherit";
+    // }
     console.log("bg c", backgroundColor, color);
-    const border = props.selected ? "1px solid " + color : "none";
 
     return (
         <div
+            className="pookie"
             style={{
-                backgroundColor,
-                color,
+                color: backgroundColor,
+                // backgroundColor: color,
                 padding: "10px",
-                border,
-                margin: "0 10px",
+                margin: "auto",
                 borderRadius: "10px",
                 // display: "flex",
             }}
@@ -78,8 +75,9 @@ export function ArtInfoCardExpanded(props: {
                     style={{
                         fontSize: "20pt",
                         // display: "flex",
-                        alignItems: "center",
                         // borderRight: "1px solid" + color,
+                        marginLeft: 0,
+                        textAlign: "start",
                     }}
                 >
                     {props.title}
@@ -95,26 +93,25 @@ export function ArtInfoCardExpanded(props: {
                     <div
                         style={{
                             alignItems: "center",
-                            background: "red",
+                            // background: "red",
                             textAlign: "start",
                         }}
                     >
                         {props.description}
                     </div>
                     <div style={{ float: "right" }}>
-                        {props.date ? (
-                            <p>(Expanded) Created on {props.date}</p>
-                        ) : (
-                            <></>
-                        )}
+                        {props.date ? <p>Created on {props.date}</p> : <></>}
                     </div>
                     <div
-                        style={{ display: "flex", alignContent: "center" }}
+                        style={{
+                            margin: "0 auto",
+                            transition: "color 0.5s ease",
+                        }}
                         onClick={() => {
                             props.onCollapseToggled();
                         }}
                     >
-                        hide
+                        <strong>hide</strong>
                     </div>
                 </div>
             </div>

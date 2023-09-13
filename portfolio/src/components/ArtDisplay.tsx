@@ -1,25 +1,35 @@
 import * as React from "react";
+import { reducer } from "../hooks/useTheme";
 import { ArtEntry, Vibe } from "../models";
 import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 import { ArtInfoCardController } from "./ArtInfoCardController";
 
 export function ArtDisplay(props: {
     entries: ArtEntry[];
-    onArtChanged: (vibe: Vibe, selectedIndex: number) => void;
+    onArtChanged: (vibe: Vibe, paletteIndex: number) => void;
 }) {
-    const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const [selectedIndex, setSelectedIndex] = React.useState(
+        Math.floor(Math.random() * props.entries.length),
+    );
     // const mediaBackgroundColor = getRandomBackgroundColorFromPalette(
     //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
     // );
     // const foreground = getRandomColorFromPalette(
     //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
     // );
+    function onUpClicked(index: number) {
+        setSelectedIndex(index + 1);
+    }
 
     React.useEffect(() => {
         const vibe = props.entries[selectedIndex].vibe;
         props.onArtChanged(vibe, paletteIndex);
+        dispatch({ newVibe: vibe });
     }, [selectedIndex, setSelectedIndex]);
+    console.log("call from art display");
     const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
+    const [state, dispatch] = React.useReducer(reducer, theme);
+    console.log("state", state);
     const paletteIndex = generateRandomNumberExcluding(
         [],
         theme.palette.length,
@@ -29,8 +39,7 @@ export function ArtDisplay(props: {
     ).palette[paletteIndex].backgroundColor;
     const foreground = getThemeFromVibe(props.entries[selectedIndex].vibe)
         .palette[paletteIndex].color;
-    console.log("mediaBackgroundColor", mediaBackgroundColor);
-    console.log("selectedIndex", selectedIndex);
+
     return (
         <div
             style={{
@@ -38,9 +47,8 @@ export function ArtDisplay(props: {
                 justifyContent: "center",
                 alignItems: "center",
                 width: "auto",
-                maxHeight: "95vh",
+                maxHeight: "100vh",
                 backgroundColor: mediaBackgroundColor,
-                borderRadius: "10px",
             }}
         >
             <>
@@ -62,14 +70,21 @@ export function ArtDisplay(props: {
                                 onCardClicked={(index: number) =>
                                     setSelectedIndex(index)
                                 }
-                                onUpClicked={(index: number) =>
-                                    setSelectedIndex(index - 1)
-                                }
+                                onUpClicked={(index: number) => {
+                                    console.log(
+                                        "up clicked",
+                                        selectedIndex,
+                                        index,
+                                    );
+                                    setSelectedIndex(selectedIndex - 1);
+                                }}
                                 onDownClicked={(index: number) => {
+                                    console.log("down clikced", index);
                                     setSelectedIndex(index + 1);
+                                    console.log("selectedIndex", selectedIndex);
                                 }}
                                 selected={selectedIndex === entry.index}
-                                vibe={entry.vibe}
+                                vibe={props.entries[selectedIndex].vibe}
                                 key={key}
                                 paletteIndex={paletteIndex}
                                 date={entry.date}

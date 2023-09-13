@@ -35,9 +35,9 @@ export function ExpandableDescription(props: {
             {props.selected ? (
                 <div
                     onClick={() => {
-                        console.log("clicked see more");
                         props.expandRequested(expanded);
                     }}
+                    style={{ transition: "color 0.5s ease" }}
                 >
                     <strong>see more</strong>
                 </div>

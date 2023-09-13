@@ -1,39 +1,16 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 import { ColorScheme, Theme, Vibe } from "../models";
-import { getColorSchemeFromVibe } from "../theme";
-
-function getThemeFromVibe(vibe: Vibe): Theme {
-    if (vibe === Vibe.VANILLA) {
-        return {
-            scheme: ColorScheme.MONOCHROMATIC,
-            palette: [{ backgroundColor: "inherit", color: "inherit" }],
-            border: "1px solid black",
-        };
-    }
-    const scheme = getColorSchemeFromVibe(vibe);
-
-    const palette = generateColorPalette(vibe, scheme);
-
-    const theme: Theme = {
-        scheme,
-        palette,
-        border: "4px solid white",
-    };
-
-    return theme;
+import {
+    getColorSchemeFromVibe,
+    getThemeFromVibe,
+    ThemeAction,
+} from "../theme";
+export function reducer(state: Theme, action: ThemeAction) {
+    console.log("state", state);
+    console.log("action", action);
+    return getThemeFromVibe(action.newVibe);
 }
 
-export default function useTheme(vibe: Vibe) {
-    const [theme, setTheme] = useState(getThemeFromVibe(vibe));
+// export function useTheme() {
 
-    useEffect(() => {
-        function handleResize() {
-            setWindowDimensions(getThemeFromVibe(vibe));
-        }
-
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    return windowDimensions;
-}
+// }
