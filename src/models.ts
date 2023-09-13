@@ -6,6 +6,7 @@ export interface ArtEntry {
     primary?: string;
     vibe: Vibe;
     index: number;
+    hidden: boolean;
 }
 
 export interface EntryDisplayProps {
@@ -40,6 +41,12 @@ export interface HslColor {
     lightness: number;
 }
 
+export interface AccessibleHslColor {
+    color: HslColor;
+    isAccessible: boolean;
+    contrastRatio?: number;
+}
+
 // type RgbColorPigment = RgbComponentValue;
 
 export enum ColorScheme {
@@ -57,10 +64,10 @@ export interface ColorPair {
     color: string;
 }
 
-export interface Theme {
-    scheme: ColorScheme;
-    border?: string;
-    palette: ColorPair[];
+export interface AccessibleColorPair {
+    colorPair: { backgroundColor: string; color: string };
+    isAccessible: boolean;
+    contrastRatio?: number;
 }
 
 // export interface MonochromaticTheme extends Theme {
@@ -425,7 +432,7 @@ export interface ColorPair {
 
 export interface Theme {
     scheme: ColorScheme;
-    palette: ColorPair[];
+    palette: AccessibleColorPair[];
     vibe: Vibe;
 }
 

@@ -32,10 +32,10 @@ export function ArtInfoCardExpanded(props: {
     // let color = props.selected ? theme.palette[0].backgroundColor : "inherit";
     // if (!isMonochromatic) {
     let backgroundColor = props.selected
-        ? theme.palette[randomPaletteIndex].backgroundColor
+        ? theme.palette[randomPaletteIndex].colorPair.backgroundColor
         : "inherit";
     let color = props.selected
-        ? theme.palette[randomPaletteIndex].color
+        ? theme.palette[randomPaletteIndex].colorPair.color
         : "inherit";
     // }
     console.log("bg c", backgroundColor, color);

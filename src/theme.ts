@@ -1,4 +1,6 @@
 import {
+    AccessibleColorPair,
+    AccessibleHslColor,
     ColorPair,
     ColorScheme,
     HslColor,
@@ -65,7 +67,7 @@ export function accessibleContrastRatio(color1: RgbColor, color2: RgbColor) {
     );
 }
 
-function contrastRatio(lum1: number, lum2: number) {
+export function contrastRatio(lum1: number, lum2: number) {
     let l1 = Math.max(lum1, lum2);
     let l2 = Math.min(lum1, lum2);
     let cr = (l1 + 0.05) / (l2 + 0.05);
@@ -279,7 +281,7 @@ function pickBackgroundColor(vibe: Vibe, n: number): HslColor {
         case Vibe.EARTH_DAY_2017:
             return { hue, saturation: 70, lightness: 90 };
         case Vibe.BABY_BLUE:
-            return { hue, saturation: 70, lightness: 90 };
+            return { hue, saturation: 80, lightness: 80 };
         case Vibe.PRUSSIAN_BLUE:
             return { hue, saturation: 70, lightness: 20 };
         case Vibe.DEEP_PURPLE:
@@ -343,7 +345,7 @@ function satisfactoryContrastRatio(
 
 export function generateAccessibleColorFromBackground(
     backgroundColor: HslColor,
-): HslColor {
+): AccessibleHslColor {
     let color = addContrastToForeground(backgroundColor);
     let accessible = true;
     const contrastRatioAcceptable = satisfactoryContrastRatio(
@@ -390,11 +392,27 @@ export function generateAccessibleColorFromBackground(
             }
         }
     }
+    const contrastRatioAcceptableAfterLoop = satisfactoryContrastRatio(
+        hslToRgb(color),
+        hslToRgb(backgroundColor),
+    );
+    console.log(
+        "contrast ratio acceptable after while loop",
+        contrastRatioAcceptableAfterLoop,
+    );
+    let cr = contrastRatio(
+        relativeLuminance(hslToRgb(color)),
+        relativeLuminance(hslToRgb(backgroundColor)),
+    );
 
     if (!accessible) {
         throw new Error("could not generate an accessible color scheme");
     }
-    return color;
+    return {
+        color,
+        isAccessible: contrastRatioAcceptableAfterLoop,
+        contrastRatio: cr,
+    };
 }
 
 /**
@@ -408,16 +426,20 @@ export function generateAccessibleColorFromBackground(
 export function generateColorPalette(
     vibe: Vibe,
     scheme: ColorScheme,
-): ColorPair[] {
+): AccessibleColorPair[] {
     const numColors = getNumberOfColorsInScheme(scheme);
-    const colorPairs: ColorPair[] = [];
+    const colorPairs: AccessibleColorPair[] = [];
     for (let n = 0; n < numColors; n++) {
         const backgroundColor = pickBackgroundColor(vibe, n);
         console.log("picked backgroundColor", backgroundColor);
-        const color = generateAccessibleColorFromBackground(backgroundColor);
+        const accessibleColor =
+            generateAccessibleColorFromBackground(backgroundColor);
         colorPairs.push({
-            color: hslToHex(color),
-            backgroundColor: hslToHex(backgroundColor),
+            colorPair: {
+                color: hslToHex(accessibleColor.color),
+                backgroundColor: hslToHex(backgroundColor),
+            },
+            isAccessible: accessibleColor.isAccessible,
         });
     }
     return colorPairs;
@@ -433,8 +455,18 @@ export function getRandomColorFromPalette(palette: ColorPair[]) {
     return palette[randomPaletteIndex].color;
 }
 
-export function getRandomBackgroundColorPairFromPalette(palette: ColorPair[]) {
-    const randomPaletteIndex = Math.floor(Math.random() * palette.length);
+export function getRandomBackgroundColorPairFromPalette(
+    palette: AccessibleColorPair[],
+) {
+    let randomPaletteIndex = Math.floor(Math.random() * palette.length);
+    const indecesAccessibilityChecked: number[] = [];
+    while (!palette[randomPaletteIndex].isAccessible) {
+        indecesAccessibilityChecked.push(randomPaletteIndex);
+        randomPaletteIndex = generateRandomNumberExcluding(
+            indecesAccessibilityChecked,
+            palette.length,
+        );
+    }
     return palette[randomPaletteIndex];
 }
 
@@ -483,8 +515,12 @@ export function getThemeFromVibe(vibe: Vibe): Theme {
     if (vibe === Vibe.VANILLA) {
         return {
             scheme: ColorScheme.MONOCHROMATIC,
-            palette: [{ backgroundColor: "inherit", color: "inherit" }],
-            border: "1px solid black",
+            palette: [
+                {
+                    colorPair: { backgroundColor: "inherit", color: "inherit" },
+                    isAccessible: true,
+                },
+            ],
             vibe,
         };
     }

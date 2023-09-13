@@ -19,8 +19,8 @@ function App() {
         <div
             style={{
                 width: "100vw",
-                background: pair.backgroundColor,
-                color: pair.color,
+                background: pair.colorPair.backgroundColor,
+                color: pair.colorPair.color,
                 display: "flex",
                 alignItems: "center",
             }}

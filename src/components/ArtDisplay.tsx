@@ -39,9 +39,9 @@ export function ArtDisplay(props: {
     );
     const mediaBackgroundColor = getThemeFromVibe(
         props.entries[selectedIndex].vibe,
-    ).palette[paletteIndex].backgroundColor;
+    ).palette[paletteIndex].colorPair.backgroundColor;
     const foreground = getThemeFromVibe(props.entries[selectedIndex].vibe)
-        .palette[paletteIndex].color;
+        .palette[paletteIndex].colorPair.color;
 
     return (
         <div
@@ -104,10 +104,14 @@ export function ArtDisplay(props: {
                         // padding: "5px",
                     }}
                 >
-                    <img
-                        style={{ maxWidth: "100%", maxHeight: "93vh" }}
-                        src={`${imagePathArray[selectedIndex]}`}
-                    ></img>
+                    {props.entries[selectedIndex].hidden ? (
+                        <>🚧 UNDER CONSTRUCTION 🚧</>
+                    ) : (
+                        <img
+                            style={{ maxWidth: "100%", maxHeight: "93vh" }}
+                            src={`${imagePathArray[selectedIndex]}`}
+                        ></img>
+                    )}
                 </div>
             </>
         </div>

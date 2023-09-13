@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ColorPair, Theme } from "../models";
+import { AccessibleColorPair, ColorPair, Theme } from "../models";
 
 export function RenderTheme(props: { pageTheme: Theme }) {
     return (
@@ -10,37 +10,48 @@ export function RenderTheme(props: { pageTheme: Theme }) {
             }}
         >
             {props.pageTheme.palette.map(
-                (colorPair: ColorPair, index: number, array) => {
-                    console.log("color pair", colorPair);
+                (
+                    accessibleColorPair: AccessibleColorPair,
+                    index: number,
+                    array,
+                ) => {
+                    console.log("color pair", accessibleColorPair);
                     console.log("whole thing", array);
                     return (
                         <div key={index}>
                             <div
                                 style={{
-                                    background: colorPair.backgroundColor,
-                                    color: colorPair.color,
+                                    background:
+                                        accessibleColorPair.colorPair
+                                            .backgroundColor,
+                                    color: accessibleColorPair.colorPair.color,
                                     width: "fit-content",
                                     minWidth: "25px",
                                     height: "25px",
                                     border: "1px",
                                     borderStyle: "solid",
-                                    borderColor: colorPair.color,
+                                    borderColor:
+                                        accessibleColorPair.colorPair.color,
                                 }}
                             >
-                                {colorPair.backgroundColor}
+                                {accessibleColorPair.colorPair.backgroundColor}
                             </div>
                             <div
                                 style={{
-                                    background: colorPair.color,
-                                    color: colorPair.backgroundColor,
+                                    background:
+                                        accessibleColorPair.colorPair.color,
+                                    color: accessibleColorPair.colorPair
+                                        .backgroundColor,
                                     width: "fit-content",
                                     minWidth: "25px",
                                     height: "25px",
                                     border:
-                                        "1px solid" + colorPair.backgroundColor,
+                                        "1px solid" +
+                                        accessibleColorPair.colorPair
+                                            .backgroundColor,
                                 }}
                             >
-                                {colorPair.color}
+                                {accessibleColorPair.colorPair.color}
                             </div>
                         </div>
                     );

@@ -21,13 +21,13 @@ export function Introduction(props: {
                             [props.pageTheme.palette.length],
                             props.pageTheme.palette.length,
                         )
-                    ].backgroundColor,
+                    ].colorPair.backgroundColor,
                 color: props.pageTheme.palette[
                     generateRandomNumberExcluding(
                         [props.pageTheme.palette.length],
                         props.pageTheme.palette.length,
                     )
-                ].color,
+                ].colorPair.color,
             }}
         >
             <div
