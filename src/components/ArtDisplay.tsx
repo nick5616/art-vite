@@ -60,6 +60,7 @@ export function ArtDisplay(props: {
                 width: "auto",
                 maxHeight: "100vh",
                 backgroundColor: mediaBackgroundColor,
+                paddingBottom: "20px",
             }}
         >
             <>
