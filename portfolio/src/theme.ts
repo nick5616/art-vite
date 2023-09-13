@@ -9,6 +9,8 @@ import {
     Vibe,
 } from "./models";
 
+const PIGMENT_MODIFICATION_AMOUNT = 2;
+
 export function rgbAsString(color: RgbColor): string {
     return "rgb(" + color.red + "," + color.green + "," + color.blue + ")";
 }
@@ -39,7 +41,6 @@ getHueValue + getSaturationValue + getLightnessValue
  * @returns
  */
 function getHueValue(vibe: Vibe, hueShiftAmount: number): number {
-    console.log("getting hue value. shifting by", hueShiftAmount);
     switch (vibe) {
         case Vibe.DARK_RED:
             return 0 + hueShiftAmount;
@@ -52,7 +53,7 @@ function getHueValue(vibe: Vibe, hueShiftAmount: number): number {
         case Vibe.PRUSSIAN_BLUE:
             return 240 + hueShiftAmount;
         case Vibe.DEEP_PURPLE:
-            return 300 + hueShiftAmount;
+            return 295 + hueShiftAmount;
         default:
             return 0 + hueShiftAmount;
     }
@@ -114,8 +115,6 @@ export function rgbToHsl(rgb: RgbColor): HslColor {
 }
 
 export function hslToRgb(hsl: HslColor): RgbColor {
-    console.log("hslCOlor", hsl);
-
     const s = hsl.saturation / 100;
     const l = hsl.lightness / 100;
 
@@ -154,7 +153,6 @@ export function hslToRgb(hsl: HslColor): RgbColor {
     r = Math.round((r + m) * 255);
     g = Math.round((g + m) * 255);
     b = Math.round((b + m) * 255);
-    console.log("rgb", { r, g, b });
     return {
         red: r as RgbComponentValue,
         green: g as RgbComponentValue,
@@ -174,7 +172,6 @@ export function hslToHex(hsl: HslColor): string {
             .padStart(2, "0");
     };
     const hex = `#${f(0)}${f(8)}${f(4)}`;
-    console.log("final hex of", hsl, hex);
     return hex;
 }
 
@@ -199,7 +196,7 @@ function relativeLuminance(color: RgbColor) {
 }
 
 export function lightenColor(color: HslColor): HslColor {
-    const lightenedLightness = color.lightness + 30;
+    const lightenedLightness = color.lightness + PIGMENT_MODIFICATION_AMOUNT;
     console.log("new lightness", lightenedLightness);
 
     if (lightenedLightness > 100) {
@@ -217,7 +214,7 @@ export function lightenColor(color: HslColor): HslColor {
 }
 
 export function darkenColor(color: HslColor): HslColor {
-    const darkenedLightness = color.lightness - 30;
+    const darkenedLightness = color.lightness - PIGMENT_MODIFICATION_AMOUNT;
 
     if (darkenedLightness < 0) {
         return {
@@ -238,12 +235,10 @@ function addContrastToForeground(
     backgroundColor: HslColor,
     color = { ...backgroundColor },
 ): HslColor {
-    console.log("current color lightness", color.lightness);
     const newColor =
         backgroundColor.lightness > 50
             ? darkenColor(color)
             : lightenColor(color);
-    console.log("new color lightness", newColor.lightness);
     return newColor;
 }
 
@@ -275,24 +270,21 @@ export function getAnalogousColor(hsl: HslColor): HslColor {
 }
 
 function pickBackgroundColor(vibe: Vibe, n: number): HslColor {
-    console.log("picking background color", vibe, n);
     const hueShiftAmount = getHueShiftAmount(getColorSchemeFromVibe(vibe), n);
-    console.log("shifting hue by this amount", hueShiftAmount);
     const hue = getHueValue(vibe, hueShiftAmount);
-    console.log("new hue!", hue);
     switch (vibe) {
         case Vibe.DARK_RED:
             return { hue, saturation: 70, lightness: 20 };
         case Vibe.ITS_CORN:
             return { hue, saturation: 70, lightness: 90 };
         case Vibe.EARTH_DAY_2017:
-            return { hue, saturation: 70, lightness: 20 };
+            return { hue, saturation: 70, lightness: 90 };
         case Vibe.BABY_BLUE:
-            return { hue, saturation: 70, lightness: 70 };
+            return { hue, saturation: 70, lightness: 90 };
         case Vibe.PRUSSIAN_BLUE:
             return { hue, saturation: 70, lightness: 20 };
         case Vibe.DEEP_PURPLE:
-            return { hue, saturation: 70, lightness: 20 };
+            return { hue, saturation: 85, lightness: 10 };
         default:
             return { hue, saturation: 70, lightness: 20 };
     }
@@ -305,11 +297,11 @@ function getHueShiftAmount(
         case ColorScheme.ANALOGOUS:
             return timesShifted === 0 ? 0 : 30;
         case ColorScheme.COMPLEMENTARY:
-            return 180;
+            return timesShifted * 180;
         case ColorScheme.SPLIT_COMPLEMENTARY:
             return timesShifted === 0 ? 150 : 60;
         case ColorScheme.SQUARE:
-            return 90;
+            return timesShifted * 90;
         case ColorScheme.TETRADIC:
             if (timesShifted === 0) {
                 return 60;
@@ -321,7 +313,7 @@ function getHueShiftAmount(
 
             return timesShifted % 2 === 0 ? 60 : 120;
         case ColorScheme.TRIADIC:
-            return 120;
+            return timesShifted * 120;
         default:
             console.log("default");
             return 0;
@@ -330,9 +322,7 @@ function getHueShiftAmount(
 
 export function generateRandomNumberExcluding(exclude: number[], max: number) {
     let chosenNumber = Math.floor(Math.random() * max);
-    console.log("chosen number", chosenNumber);
     while (exclude.includes(chosenNumber)) {
-        console.log("generating number", chosenNumber);
         chosenNumber = Math.floor(Math.random() * max);
     }
     return chosenNumber;
@@ -342,16 +332,8 @@ function satisfactoryContrastRatio(
     rgbColor1: RgbColor,
     rgbColor2: RgbColor,
 ): boolean {
-    console.log(
-        "determining if satisfactory contrast ratio",
-        rgbColor1,
-        rgbColor2,
-    );
     const y1 = relativeLuminance(rgbColor1);
     const y2 = relativeLuminance(rgbColor2);
-    // console.log(y1, y2);
-    const ratio = contrastRatio(y1, y2);
-    console.log("ratio", ratio);
     return (
         contrastRatio(
             relativeLuminance(rgbColor1),
@@ -365,7 +347,6 @@ export function generateAccessibleColorFromBackground(
 ): HslColor {
     let color = addContrastToForeground(backgroundColor);
     let accessible = true;
-    console.log("🍏 COLOr!", color);
     const contrastRatioAcceptable = satisfactoryContrastRatio(
         hslToRgb(color),
         hslToRgb(backgroundColor),
@@ -374,12 +355,7 @@ export function generateAccessibleColorFromBackground(
     while (
         !satisfactoryContrastRatio(hslToRgb(color), hslToRgb(backgroundColor))
     ) {
-        console.log("LOOP");
         if (backgroundColor.lightness < 50) {
-            console.log(
-                "background lighness less than 50",
-                backgroundColor.lightness,
-            );
             if (color.lightness <= 90) {
                 color = lightenColor(color);
             } else {
@@ -397,23 +373,20 @@ export function generateAccessibleColorFromBackground(
                 break;
             }
         } else {
-            console.log(
-                "background lightness is not less than 50",
-                backgroundColor.lightness,
-            );
-            if (color.lightness > 10) color = darkenColor(color);
-            else {
+            if (color.lightness > PIGMENT_MODIFICATION_AMOUNT) {
+                color = darkenColor(color);
+            } else {
                 color.lightness = 0;
-                let cr = contrastRatio(
-                    relativeLuminance(hslToRgb(color)),
-                    relativeLuminance(hslToRgb(backgroundColor)),
-                );
-                if (cr < 4.5) {
-                    console.log(
-                        "🚨the final color combo was found to be inaccessible",
-                    );
-                    accessible = true;
-                }
+                // let cr = contrastRatio(
+                //     relativeLuminance(hslToRgb(color)),
+                //     relativeLuminance(hslToRgb(backgroundColor)),
+                // );
+                // if (cr < 4.5) {
+                //     console.log(
+                //         "🚨the final color combo was found to be inaccessible",
+                //     );
+                //     accessible = true;
+                // }
                 break;
             }
         }
@@ -438,10 +411,8 @@ export function generateColorPalette(
     scheme: ColorScheme,
 ): ColorPair[] {
     const numColors = getNumberOfColorsInScheme(scheme);
-    console.log("number of colors", numColors);
     const colorPairs: ColorPair[] = [];
     for (let n = 0; n < numColors; n++) {
-        console.log("looping on color pairs", n);
         const backgroundColor = pickBackgroundColor(vibe, n);
         console.log("picked backgroundColor", backgroundColor);
         const color = generateAccessibleColorFromBackground(backgroundColor);
@@ -461,6 +432,11 @@ export function getRandomBackgroundColorFromPalette(palette: ColorPair[]) {
 export function getRandomColorFromPalette(palette: ColorPair[]) {
     const randomPaletteIndex = Math.floor(Math.random() * palette.length);
     return palette[randomPaletteIndex].color;
+}
+
+export function getRandomBackgroundColorPairFromPalette(palette: ColorPair[]) {
+    const randomPaletteIndex = Math.floor(Math.random() * palette.length);
+    return palette[randomPaletteIndex];
 }
 
 export function getNumberOfColorsInScheme(scheme: ColorScheme): number {
@@ -489,26 +465,28 @@ export function getColorSchemeFromVibe(vibe: Vibe): ColorScheme {
         case Vibe.DARK_RED:
             return ColorScheme.MONOCHROMATIC;
         case Vibe.ITS_CORN:
-            return ColorScheme.ANALOGOUS;
+            return ColorScheme.TRIADIC;
         case Vibe.EARTH_DAY_2017:
-            return ColorScheme.ANALOGOUS;
+            return ColorScheme.TETRADIC;
         case Vibe.BABY_BLUE:
             return ColorScheme.TETRADIC;
         case Vibe.PRUSSIAN_BLUE:
-            return ColorScheme.ANALOGOUS;
+            return ColorScheme.SQUARE;
         case Vibe.DEEP_PURPLE:
-            return ColorScheme.ANALOGOUS;
+            return ColorScheme.TRIADIC;
         default:
             return ColorScheme.MONOCHROMATIC;
     }
 }
 
 export function getThemeFromVibe(vibe: Vibe): Theme {
+    if (vibe === Vibe.EARTH_DAY_2017) console.log("this is when it happens!");
     if (vibe === Vibe.VANILLA) {
         return {
             scheme: ColorScheme.MONOCHROMATIC,
             palette: [{ backgroundColor: "inherit", color: "inherit" }],
             border: "1px solid black",
+            vibe,
         };
     }
     const scheme = getColorSchemeFromVibe(vibe);
@@ -518,8 +496,12 @@ export function getThemeFromVibe(vibe: Vibe): Theme {
     const theme: Theme = {
         scheme,
         palette,
-        border: "4px solid white",
+        vibe,
     };
 
     return theme;
+}
+
+export interface ThemeAction {
+    newVibe: Vibe;
 }

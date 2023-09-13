@@ -20,29 +20,27 @@ export function ArtInfoCard(props: {
                 style={{
                     display: "flex",
                     alignItems: "center",
-                    paddingRight: "20px",
+                    paddingRight: "10px",
                 }}
             >
-                <div>
+                {/* <div>
                     <div onClick={() => props.onUpClicked(props.index)}>Up</div>
                     <div onClick={() => props.onDownClicked(props.index)}>
                         Down
                     </div>
-                </div>
+                </div> */}
             </div>
             <ArtTitle title={props.title}></ArtTitle>
             <div
                 style={{
                     display: "flex",
                     alignItems: "center",
-                    overflow: "visible",
                 }}
             >
                 <div style={{}}>
                     <ExpandableDescription
                         description={props.description}
                         expandRequested={() => {
-                            console.log("expand requested");
                             props.onCollapseToggled();
                         }}
                         selected={props.selected}

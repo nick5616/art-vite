@@ -1,4 +1,3 @@
-import * as e from "express";
 import * as React from "react";
 import { ColorScheme, Vibe } from "../models";
 import {
@@ -23,7 +22,8 @@ export function ArtInfoCardController(props: {
     onUpClicked: (index: number) => void;
     onDownClicked: (index: number) => void;
 }) {
-    const [descriptionExpanded, setDescriptionExpanded] = React.useState(true);
+    const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
+    console.log("in info card controller");
     const theme = getThemeFromVibe(props.vibe);
     console.log("🐽 I smell a truffle theme!!", theme);
     // const randomPaletteIndex = generateRandomNumberExcluding(
@@ -38,28 +38,32 @@ export function ArtInfoCardController(props: {
               [props.paletteIndex],
               theme.palette.length,
           );
-    console.log("PALETTE INDEX", randomPaletteIndex);
+    console.log(
+        "🐝 NOT-PALETTE INDEX of info card controller",
+        randomPaletteIndex,
+    );
     let backgroundColor = props.selected ? theme.palette[0].color : "inherit";
     let color = props.selected ? theme.palette[0].backgroundColor : "inherit";
-    if (!isMonochromatic) {
-        backgroundColor = props.selected
-            ? theme.palette[randomPaletteIndex].backgroundColor
-            : "inherit";
-        color = props.selected
-            ? theme.palette[randomPaletteIndex].color
-            : "inherit";
-    }
-    console.log("bg c", backgroundColor, color);
+    // if (!isMonochromatic) {
+    //     backgroundColor = props.selected
+    //         ? theme.palette[randomPaletteIndex].backgroundColor
+    //         : "inherit";
+    //     color = props.selected
+    //         ? theme.palette[randomPaletteIndex].color
+    //         : "inherit";
+    // }
     const border = props.selected ? "1px solid " + color : "none";
 
     return (
         <div
             style={{
-                backgroundColor,
                 color,
+                backgroundColor,
                 padding: "10px",
                 border,
                 margin: "0 10px",
+                marginLeft: "50px",
+
                 borderRadius: "10px",
                 display: "flex",
                 overflow: "visible",
@@ -68,20 +72,16 @@ export function ArtInfoCardController(props: {
                 props.onCardClicked(props.index);
             }}
         >
-            {descriptionExpanded ? (
+            {!(descriptionExpanded && props.selected) ? (
                 <ArtInfoCard
                     title={props.title}
                     onCollapseToggled={() => {
-                        console.log(
-                            "collapse toggled, old:",
-                            descriptionExpanded,
-                        );
                         setDescriptionExpanded(!descriptionExpanded);
                     }}
                     description={props.description}
-                    index={0}
+                    index={props.index}
                     date={props.date}
-                    onUpClicked={props.onDownClicked}
+                    onUpClicked={props.onUpClicked}
                     onDownClicked={props.onDownClicked}
                     selected={props.selected}
                 ></ArtInfoCard>

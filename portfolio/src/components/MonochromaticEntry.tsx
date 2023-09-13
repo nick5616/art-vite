@@ -19,7 +19,6 @@ export function MonochromaticEntry({
     theme,
 }: EntryProps): JSX.Element {
     const imageRef = React.createRef();
-    console.log("monochromatic entry", description);
     return (
         <div
             className="entryContainer"
