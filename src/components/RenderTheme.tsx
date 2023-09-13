@@ -1,5 +1,5 @@
 import * as React from "react";
-import { AccessibleColorPair, ColorPair, Theme } from "../models";
+import { AccessibleColorPair, Theme } from "../models";
 
 export function RenderTheme(props: { pageTheme: Theme }) {
     return (
