@@ -9,7 +9,7 @@ import imgUrl3 from "../../art/Untitled_Artwork11.jpeg";
 import imgUrl4 from "../../art/Untitled_Artwork2.jpg";
 import imgUrl5 from "../../art/Untitled_Artwork3.jpg";
 import imgUrl6 from "../../art/Untitled_Artwork10.jpg";
-import imgUrl7 from "../../art/angrybird.png";
+// import imgUrl7 from "../../art/angrybird.png";
 
 export function ArtDisplay(props: {
     entries: ArtEntry[];
