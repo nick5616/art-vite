@@ -41,7 +41,10 @@ export function Introduction(props: {
                     <h2 className="serif">
                         I hope you enjoy my art. I sure do enjoy drawing it 👼🏼📲
                     </h2>
-                    <RenderTheme pageTheme={props.pageTheme}></RenderTheme>
+                    <RenderTheme
+                        pageTheme={props.pageTheme}
+                        devMode={false}
+                    ></RenderTheme>
                 </div>
             </div>
         </div>

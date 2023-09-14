@@ -1,7 +1,7 @@
 import * as React from "react";
 import { AccessibleColorPair, Theme } from "../models";
 
-export function RenderTheme(props: { pageTheme: Theme }) {
+export function RenderTheme(props: { pageTheme: Theme; devMode: boolean }) {
     return (
         <div
             style={{
@@ -10,13 +10,8 @@ export function RenderTheme(props: { pageTheme: Theme }) {
             }}
         >
             {props.pageTheme.palette.map(
-                (
-                    accessibleColorPair: AccessibleColorPair,
-                    index: number,
-                    array,
-                ) => {
+                (accessibleColorPair: AccessibleColorPair, index: number) => {
                     console.log("color pair", accessibleColorPair);
-                    console.log("whole thing", array);
                     return (
                         <div key={index}>
                             <div
@@ -34,7 +29,13 @@ export function RenderTheme(props: { pageTheme: Theme }) {
                                         accessibleColorPair.colorPair.color,
                                 }}
                             >
-                                {accessibleColorPair.colorPair.backgroundColor}
+                                {props.devMode ? (
+                                    <div>
+                                        {accessibleColorPair.colorPair.color}
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                             <div
                                 style={{
@@ -51,7 +52,16 @@ export function RenderTheme(props: { pageTheme: Theme }) {
                                             .backgroundColor,
                                 }}
                             >
-                                {accessibleColorPair.colorPair.color}
+                                {props.devMode ? (
+                                    <div>
+                                        {
+                                            accessibleColorPair.colorPair
+                                                .backgroundColor
+                                        }
+                                    </div>
+                                ) : (
+                                    <></>
+                                )}
                             </div>
                         </div>
                     );
