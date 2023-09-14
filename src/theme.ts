@@ -301,13 +301,13 @@ function pickBackgroundColor(vibe: Vibe, n: number): HslColor {
         case Vibe.DARK_RED:
             return { hue, saturation: 70, lightness: 20 };
         case Vibe.ITS_CORN:
-            return { hue, saturation: 70, lightness: 90 };
+            return { hue, saturation: 60, lightness: 70 };
         case Vibe.EARTH_DAY_2017:
             return { hue, saturation: 70, lightness: 90 };
         case Vibe.BABY_BLUE:
             return { hue, saturation: 80, lightness: 80 };
         case Vibe.PRUSSIAN_BLUE:
-            return { hue, saturation: 70, lightness: 20 };
+            return { hue, saturation: 65, lightness: 90 };
         case Vibe.DEEP_PURPLE:
             return { hue, saturation: 85, lightness: 10 };
         default:
@@ -416,12 +416,12 @@ export function generateAccessibleColorFromBackground(
     let color = addContrastToForeground(backgroundColor);
     let accessible = true;
     const contrastRatioAcceptable = satisfactoryContrastRatio(
-        hslToRgb(color),
-        hslToRgb(backgroundColor),
+        hslToRgb2(color),
+        hslToRgb2(backgroundColor),
     );
     console.log("contrast ratio acceptable", contrastRatioAcceptable);
     while (
-        !satisfactoryContrastRatio(hslToRgb(color), hslToRgb(backgroundColor))
+        !satisfactoryContrastRatio(hslToRgb2(color), hslToRgb2(backgroundColor))
     ) {
         if (backgroundColor.lightness < 50) {
             if (color.lightness <= 90) {
@@ -429,8 +429,8 @@ export function generateAccessibleColorFromBackground(
             } else {
                 color.lightness = 100;
                 let cr = contrastRatio(
-                    relativeLuminance(hslToRgb(color)),
-                    relativeLuminance(hslToRgb(backgroundColor)),
+                    relativeLuminance(hslToRgb2(color)),
+                    relativeLuminance(hslToRgb2(backgroundColor)),
                 );
                 if (cr < 4.5) {
                     console.log(
@@ -460,8 +460,8 @@ export function generateAccessibleColorFromBackground(
         }
     }
     const contrastRatioAcceptableAfterLoop = satisfactoryContrastRatio(
-        hslToRgb(color),
-        hslToRgb(backgroundColor),
+        hslToRgb2(color),
+        hslToRgb2(backgroundColor),
     );
     console.log(
         "contrast ratio acceptable after while loop",
@@ -478,7 +478,7 @@ export function generateAccessibleColorFromBackground(
     // });
 
     // let newCr = contrastRatio();
-    let contest = contrast(hslToRgb(color), hslToRgb(backgroundColor));
+    let contest = contrast(hslToRgb2(color), hslToRgb2(backgroundColor));
     console.log("🤨 CONTEST", contest);
     console.log("with new rgb algo", cr);
     if (!accessible) {
@@ -588,13 +588,13 @@ export function getColorSchemeFromVibe(vibe: Vibe): ColorScheme {
         case Vibe.DARK_RED:
             return ColorScheme.MONOCHROMATIC;
         case Vibe.ITS_CORN:
-            return ColorScheme.TRIADIC;
+            return ColorScheme.ANALOGOUS;
         case Vibe.EARTH_DAY_2017:
-            return ColorScheme.TETRADIC;
+            return ColorScheme.COMPLEMENTARY;
         case Vibe.BABY_BLUE:
             return ColorScheme.TETRADIC;
         case Vibe.PRUSSIAN_BLUE:
-            return ColorScheme.SQUARE;
+            return ColorScheme.COMPLEMENTARY;
         case Vibe.DEEP_PURPLE:
             return ColorScheme.TRIADIC;
         default:

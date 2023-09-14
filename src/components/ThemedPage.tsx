@@ -41,7 +41,7 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             title: "The Bite of '87",
             description: "This is what I think about sometimes.",
             mediaName: "Untitled_Artwork2.jpg",
-            vibe: Vibe.ITS_CORN,
+            vibe: Vibe.PRUSSIAN_BLUE,
             index: 3,
             hidden: false,
         },
@@ -59,10 +59,18 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             description:
                 "I sketched a duck. Is this what ducks look like? I just pictured one and tried to draw it. I feel like repeatedly doing this, without real-world reference, will create some discrepancies between the sketches and the depictions over time",
             mediaName: "Untitled_Artwork10.jpg",
-            vibe: Vibe.VANILLA,
+            vibe: Vibe.EARTH_DAY_2017,
             index: 5,
             hidden: false,
         },
+        // {
+        //     title: "New post",
+        //     description: "I stupidasss bee, hates mondays",
+        //     mediaName: "not used",
+        //     vibe: Vibe.ITS_CORN,
+        //     index: 6,
+        //     hidden: false,
+        // },
     ];
 
     return data;
