@@ -75,6 +75,7 @@ export function ArtDisplay(props: {
         y: number;
     } | null>(null);
     console.log("touches", touchStart, touchEnd);
+    // const createdOnString = props.entries[selectedIndex].date;
     const descriptionMaxCharacterLimit = 34;
     // the required distance between touchStart and touchEnd to be detected as a swipe
     const minSwipeDistance = 50;
@@ -197,7 +198,13 @@ export function ArtDisplay(props: {
                     </>
                 </div>
             ) : (
-                <div style={{}}>
+                <div
+                    style={{
+                        border: "2px dashed black",
+                        height: "100vh",
+                        backgroundColor: "red",
+                    }}
+                >
                     <div
                         style={{
                             display: "flex",
@@ -208,17 +215,35 @@ export function ArtDisplay(props: {
                             marginBottom: "10px",
                         }}
                     >
-                        <h1
-                            style={{
-                                fontSize: "20pt",
-                                padding: 0,
-                                display: "flex",
-                                textAlign: "start",
-                                marginLeft: "5vw",
-                            }}
-                        >
-                            {props.entries[selectedIndex].title}
-                        </h1>
+                        <div>
+                            <h1
+                                style={{
+                                    fontSize: "20pt",
+                                    padding: 0,
+                                    display: "flex",
+                                    textAlign: "start",
+                                    marginLeft: "5vw",
+                                    marginBottom: "0",
+                                }}
+                            >
+                                {props.entries[selectedIndex].title}
+                            </h1>
+
+                            {props.entries[secondIndex].date ? (
+                                <h2
+                                    style={{
+                                        fontSize: "12pt",
+                                        marginTop: "0",
+                                        marginLeft: "5vw",
+                                    }}
+                                >
+                                    <strong>Created on </strong>
+                                    {props.entries[secondIndex].date}
+                                </h2>
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                         <IndexOrbs
                             index={selectedIndex}
                             length={props.entries.length}
