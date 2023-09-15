@@ -67,8 +67,14 @@ export function ArtDisplay(props: {
     const deviceIsBigWidth = useMediaQuery(
         "only screen and (min-width: 1057px)",
     );
-    const [touchStart, setTouchStart] = React.useState(null);
-    const [touchEnd, setTouchEnd] = React.useState(null);
+    const [touchStart, setTouchStart] = React.useState<{
+        x: number;
+        y: number;
+    } | null>(null);
+    const [touchEnd, setTouchEnd] = React.useState<{
+        x: number;
+        y: number;
+    } | null>(null);
 
     const descriptionMaxCharacterLimit = 34;
     // the required distance between touchStart and touchEnd to be detected as a swipe
@@ -76,16 +82,26 @@ export function ArtDisplay(props: {
 
     const onTouchStart = (e: any) => {
         setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
-        setTouchStart(e.targetTouches[0].clientX);
+        setTouchStart({
+            x: e.targetTouches[0].clientX,
+            y: e.targetTouches[0].clientY,
+        });
     };
 
-    const onTouchMove = (e: any) => setTouchEnd(e.targetTouches[0].clientX);
+    const onTouchMove = (e: any) =>
+        setTouchEnd({
+            x: e.targetTouches[0].clientX,
+            y: e.targetTouches[0].clientY,
+        });
 
     const onTouchEnd = () => {
         if (!touchStart || !touchEnd) return;
-        const distance = touchStart - touchEnd;
-        const isLeftSwipe = distance > minSwipeDistance;
-        const isRightSwipe = distance < -minSwipeDistance;
+        const distanceX = touchStart.x - touchEnd.x;
+        const distanceY = touchStart.y - touchEnd.y;
+
+        const isHorizontalSwipe = distanceX > distanceY;
+        const isLeftSwipe = distanceX > minSwipeDistance && isHorizontalSwipe;
+        const isRightSwipe = distanceX < -minSwipeDistance && isHorizontalSwipe;
         if (isLeftSwipe || isRightSwipe)
             console.log("swipe", isLeftSwipe ? "left" : "right");
         // add your conditional logic here
