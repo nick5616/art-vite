@@ -7,6 +7,7 @@ import {
     getRandomBackgroundColorPairFromPalette,
     getThemeFromVibe,
 } from "./theme";
+import { DebugWindowWidth } from "./components/DebugWindowWidth";
 
 function App() {
     const [pageTheme, setPageTheme] = useState<Theme>(
@@ -31,6 +32,7 @@ function App() {
                     setPageTheme(theme);
                 }}
             ></ThemedPage>
+            <DebugWindowWidth devMode={false}></DebugWindowWidth>
         </div>
     );
 }

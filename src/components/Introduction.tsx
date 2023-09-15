@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useRef } from "react";
-import { Theme } from "../models";
+import { ColorScheme, Theme } from "../models";
 import { generateRandomNumberExcluding } from "../theme";
 import { RenderTheme } from "./RenderTheme";
 import "./styles/introduction.css";
@@ -9,7 +9,10 @@ export function Introduction(props: {
     chosenPaletteIndex: number;
 }): React.ReactElement {
     const ref = useRef<HTMLDivElement>(null);
-
+    const exclude =
+        props.pageTheme.scheme === ColorScheme.MONOCHROMATIC
+            ? []
+            : [props.chosenPaletteIndex];
     return (
         <div
             className="page-view"
@@ -18,13 +21,13 @@ export function Introduction(props: {
                 backgroundColor:
                     props.pageTheme.palette[
                         generateRandomNumberExcluding(
-                            [props.pageTheme.palette.length],
+                            exclude,
                             props.pageTheme.palette.length,
                         )
                     ].colorPair.backgroundColor,
                 color: props.pageTheme.palette[
                     generateRandomNumberExcluding(
-                        [props.pageTheme.palette.length],
+                        exclude,
                         props.pageTheme.palette.length,
                     )
                 ].colorPair.color,
