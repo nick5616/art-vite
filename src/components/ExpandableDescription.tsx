@@ -12,7 +12,7 @@ export function ExpandableDescription(props: {
         minifiedDescription += "...";
     }
     if (props.description.length > collapseThreshold && expanded) {
-        console.log("MIN", minifiedDescription);
+        // console.log("MIN", minifiedDescription);
         setExpanded(false);
     }
     return expanded ? (

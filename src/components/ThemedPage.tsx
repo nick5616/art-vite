@@ -90,7 +90,7 @@ export function ThemedPage(props: {
     //     [],
     //     pageTheme.palette.length,
     // );
-    console.log("page vibe", pageVibe);
+    // console.log("page vibe", pageVibe);
     // const isMonochromatic = pageTheme.palette.length === 1;
     // const backgroundColor = isMonochromatic
     //     ? pageTheme.palette[0].color
@@ -115,14 +115,14 @@ export function ThemedPage(props: {
             <ArtDisplay
                 entries={entries}
                 onArtChanged={(vibe, paletteIndex) => {
-                    console.log(
-                        "art changed. vibe paletteIndex",
-                        vibe,
-                        paletteIndex,
-                    );
+                    // console.log(
+                    //     "art changed. vibe paletteIndex",
+                    //     vibe,
+                    //     paletteIndex,
+                    // );
                     setPageVibe(vibe);
                     setChosenPaletteIndex(paletteIndex);
-                    console.log("CHOSEN PALETTE", chosenPaletteIndex);
+                    // console.log("CHOSEN PALETTE", chosenPaletteIndex);
                 }}
             ></ArtDisplay>
         </div>

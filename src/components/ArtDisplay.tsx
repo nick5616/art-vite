@@ -31,14 +31,14 @@ export function ArtDisplay(props: {
     React.useEffect(() => {
         const vibe = props.entries[selectedIndex].vibe;
         props.onArtChanged(vibe, paletteIndex);
-        dispatch({ newVibe: vibe });
+        // dispatch({ newVibe: vibe });
     }, [selectedIndex, setSelectedIndex]);
-    console.log("call from art display");
+    // console.log("call from art display");
     const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
     const { width } = useWindowDimensions();
     const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
-    const [state, dispatch] = React.useReducer(reducer, theme);
-    console.log("state", state);
+    // const [state, dispatch] = React.useReducer(reducer, theme);
+    // console.log("state", state);
     const imagePathArray = [
         imgUrl,
         imgUrl2,
@@ -75,7 +75,7 @@ export function ArtDisplay(props: {
         x: number;
         y: number;
     } | null>(null);
-
+    console.log("touches", touchStart, touchEnd);
     const descriptionMaxCharacterLimit = 34;
     // the required distance between touchStart and touchEnd to be detected as a swipe
     const minSwipeDistance = 50;
@@ -83,15 +83,15 @@ export function ArtDisplay(props: {
     const onTouchStart = (e: any) => {
         setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
         setTouchStart({
-            x: e.targetTouches[0].clientX,
-            y: e.targetTouches[0].clientY,
+            x: e.targetTouches[0].clientX as number,
+            y: e.targetTouches[0].clientY as number,
         });
     };
 
     const onTouchMove = (e: any) =>
         setTouchEnd({
-            x: e.targetTouches[0].clientX,
-            y: e.targetTouches[0].clientY,
+            x: e.targetTouches[0].clientX as number,
+            y: e.targetTouches[0].clientY as number,
         });
 
     const onTouchEnd = () => {
@@ -99,7 +99,8 @@ export function ArtDisplay(props: {
         const distanceX = touchStart.x - touchEnd.x;
         const distanceY = touchStart.y - touchEnd.y;
 
-        const isHorizontalSwipe = distanceX > distanceY;
+        const isHorizontalSwipe = Math.abs(distanceX) > Math.abs(distanceY);
+
         const isLeftSwipe = distanceX > minSwipeDistance && isHorizontalSwipe;
         const isRightSwipe = distanceX < -minSwipeDistance && isHorizontalSwipe;
         if (isLeftSwipe || isRightSwipe)
@@ -116,7 +117,6 @@ export function ArtDisplay(props: {
             });
         }
     };
-    console.log("device is big width!");
     return (
         <div>
             {deviceIsBigWidth ? (
@@ -141,7 +141,6 @@ export function ArtDisplay(props: {
                             }}
                         >
                             {props.entries.map((entry, key) => {
-                                console.log("entry!!", entry);
                                 return (
                                     <ArtInfoCardController
                                         title={entry.title}

@@ -17,9 +17,9 @@ export function ArtInfoCardController(props: {
     onDownClicked: (index: number) => void;
 }) {
     const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
-    console.log("in info card controller");
+    // console.log("in info card controller");
     const theme = getThemeFromVibe(props.vibe);
-    console.log("🐽 I smell a truffle theme!!", theme);
+    // console.log("🐽 I smell a truffle theme!!", theme);
     // const randomPaletteIndex = generateRandomNumberExcluding(
     //     [props.paletteIndex],
     //     theme.palette.length - 1,
@@ -32,10 +32,10 @@ export function ArtInfoCardController(props: {
               [props.paletteIndex],
               theme.palette.length,
           );
-    console.log(
-        "🐝 NOT-PALETTE INDEX of info card controller",
-        randomPaletteIndex,
-    );
+    // console.log(
+    //     "🐝 NOT-PALETTE INDEX of info card controller",
+    //     randomPaletteIndex,
+    // );
     let backgroundColor = props.selected
         ? theme.palette[randomPaletteIndex].colorPair.color
         : "inherit";
@@ -85,10 +85,10 @@ export function ArtInfoCardController(props: {
                 <ArtInfoCardExpanded
                     title={props.title}
                     onCollapseToggled={() => {
-                        console.log(
-                            "collapse toggled, old:",
-                            descriptionExpanded,
-                        );
+                        // console.log(
+                        //     "collapse toggled, old:",
+                        //     descriptionExpanded,
+                        // );
                         setDescriptionExpanded(!descriptionExpanded);
                     }}
                     description={props.description}

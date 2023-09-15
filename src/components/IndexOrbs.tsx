@@ -21,7 +21,7 @@ export function IndexOrbs(props: {
         gorp: 1,
         jorp: "Off the charts",
     });
-    console.log("array of length", arrayOfLength);
+    // console.log("array of length", arrayOfLength);
     return (
         <div
             style={{
@@ -32,7 +32,7 @@ export function IndexOrbs(props: {
             }}
         >
             {arrayOfLength.map((_, index) => {
-                console.log("index, index");
+                // console.log("index, index");
                 const endContent =
                     arrayOfLength.length - 1 === index ? (
                         <div></div>

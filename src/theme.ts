@@ -459,14 +459,14 @@ export function generateAccessibleColorFromBackground(
             }
         }
     }
-    const contrastRatioAcceptableAfterLoop = satisfactoryContrastRatio(
-        hslToRgb2(color),
-        hslToRgb2(backgroundColor),
-    );
-    console.log(
-        "contrast ratio acceptable after while loop",
-        contrastRatioAcceptableAfterLoop,
-    );
+    // const contrastRatioAcceptableAfterLoop = satisfactoryContrastRatio(
+    //     hslToRgb2(color),
+    //     hslToRgb2(backgroundColor),
+    // );
+    // console.log(
+    //     "contrast ratio acceptable after while loop",
+    //     contrastRatioAcceptableAfterLoop,
+    // );
     let cr = contrastRatio(
         relativeLuminance(hslToRgb2(color)),
         relativeLuminance(hslToRgb2(backgroundColor)),
@@ -479,8 +479,8 @@ export function generateAccessibleColorFromBackground(
 
     // let newCr = contrastRatio();
     let contest = contrast(hslToRgb2(color), hslToRgb2(backgroundColor));
-    console.log("🤨 CONTEST", contest);
-    console.log("with new rgb algo", cr);
+    // console.log("🤨 CONTEST", contest);
+    // console.log("with new rgb algo", cr);
     if (!accessible) {
         throw new Error("could not generate an accessible color scheme");
     }
@@ -507,7 +507,7 @@ export function generateColorPalette(
     const colorPairs: AccessibleColorPair[] = [];
     for (let n = 0; n < numColors; n++) {
         const backgroundColor = pickBackgroundColor(vibe, n);
-        console.log("picked backgroundColor", backgroundColor);
+        // console.log("picked backgroundColor", backgroundColor);
         let accessibleColor =
             generateAccessibleColorFromBackground(backgroundColor);
         const triedIndeces = [n];
@@ -619,7 +619,7 @@ export function getThemeFromVibe(vibe: Vibe): Theme {
     const scheme = getColorSchemeFromVibe(vibe);
 
     const palette = generateColorPalette(vibe, scheme);
-    console.log("palette", palette);
+    // console.log("palette", palette);
     const theme: Theme = {
         scheme,
         palette,
