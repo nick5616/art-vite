@@ -1,6 +1,6 @@
 import * as React from "react";
 import { reducer } from "../hooks/useTheme";
-import { ArtEntry, ColorScheme, Vibe } from "../models";
+import { ArtEntry, Vibe } from "../models";
 import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 import { ArtInfoCardController } from "./ArtInfoCardController";
 import imgUrl from "../../art/Untitled_Artwork5.jpg";
@@ -10,8 +10,8 @@ import imgUrl4 from "../../art/Untitled_Artwork2.jpg";
 import imgUrl5 from "../../art/Untitled_Artwork3.jpg";
 import imgUrl6 from "../../art/Untitled_Artwork10.jpg";
 // import imgUrl7 from "../../art/angrybird.png";
-import { useMediaQuery, useMediaQueries } from "@react-hook/media-query";
-import { firstNCharacters, firstNWords } from "../../utils/strings";
+import { useMediaQuery } from "@react-hook/media-query";
+import { firstNCharacters } from "../../utils/strings";
 import { IndexOrbs } from "./IndexOrbs";
 import useWindowDimensions from "../hooks/useWindowDimenstions";
 export function ArtDisplay(props: {
@@ -35,7 +35,7 @@ export function ArtDisplay(props: {
     }, [selectedIndex, setSelectedIndex]);
     console.log("call from art display");
     const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
-    const { width, height } = useWindowDimensions();
+    const { width } = useWindowDimensions();
     const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
     const [state, dispatch] = React.useReducer(reducer, theme);
     console.log("state", state);

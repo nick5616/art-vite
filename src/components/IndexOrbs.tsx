@@ -1,7 +1,6 @@
 import * as React from "react";
 import { ColorScheme, Theme } from "../models";
 import { generateRandomNumberExcluding } from "../theme";
-import { ThemedPage } from "./ThemedPage";
 
 export function IndexOrbs(props: {
     index: number;

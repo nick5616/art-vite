@@ -4,7 +4,6 @@ import { Theme, Vibe } from "../models";
 import { ArtEntry } from "../models";
 import { getThemeFromVibe } from "../theme";
 import { ArtDisplay } from "./ArtDisplay";
-import { DebugWindowWidth } from "./DebugWindowWidth";
 import { Introduction } from "./Introduction";
 
 function fetchEntriesFromJSONMock(): ArtEntry[] {
