@@ -200,7 +200,7 @@ export function ArtDisplay(props: {
             ) : (
                 <div
                     style={{
-                        border: "2px dashed black",
+                        // border: "2px dashed black",
                         height: "100vh",
                     }}
                 >
