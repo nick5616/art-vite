@@ -1,5 +1,4 @@
 import * as React from "react";
-import { reducer } from "../hooks/useTheme";
 import { ArtEntry, Vibe } from "../models";
 import { generateRandomNumberExcluding, getThemeFromVibe } from "../theme";
 import { ArtInfoCardController } from "./ArtInfoCardController";

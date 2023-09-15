@@ -478,7 +478,6 @@ export function generateAccessibleColorFromBackground(
     // });
 
     // let newCr = contrastRatio();
-    let contest = contrast(hslToRgb2(color), hslToRgb2(backgroundColor));
     // console.log("🤨 CONTEST", contest);
     // console.log("with new rgb algo", cr);
     if (!accessible) {
