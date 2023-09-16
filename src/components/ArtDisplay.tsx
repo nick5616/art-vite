@@ -202,6 +202,7 @@ export function ArtDisplay(props: {
                     style={{
                         // border: "2px dashed black",
                         height: "100vh",
+                        position: "relative",
                     }}
                 >
                     <div
@@ -276,6 +277,9 @@ export function ArtDisplay(props: {
                             display: "flex",
                             alignItems: "center",
                             margin: "0 auto",
+                            position: "absolute",
+                            bottom: 0,
+                            // border: "2px dashed white",
                         }}
                     >
                         <div
@@ -294,7 +298,11 @@ export function ArtDisplay(props: {
                             onTouchEnd={onTouchEnd}
                             onTouchMove={onTouchMove}
                         >
-                            <div style={{ display: "flex" }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                }}
+                            >
                                 {descriptionExpanded ||
                                 props.entries[selectedIndex].description
                                     .length < descriptionMaxCharacterLimit ? (
