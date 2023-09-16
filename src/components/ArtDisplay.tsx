@@ -215,14 +215,13 @@ export function ArtDisplay(props: {
                             marginBottom: "10px",
                         }}
                     >
-                        <div>
+                        <div style={{ marginLeft: "5vw" }}>
                             <h1
                                 style={{
                                     fontSize: "20pt",
                                     padding: 0,
                                     display: "flex",
                                     textAlign: "start",
-                                    marginLeft: "5vw",
                                     marginBottom: "0",
                                 }}
                             >
@@ -234,7 +233,7 @@ export function ArtDisplay(props: {
                                     style={{
                                         fontSize: "12pt",
                                         marginTop: "0",
-                                        marginLeft: "5vw",
+                                        padding: 0,
                                     }}
                                 >
                                     <strong>Created on </strong>
@@ -261,8 +260,8 @@ export function ArtDisplay(props: {
                     ) : (
                         <img
                             style={{
-                                maxWidth: "95vw",
-                                height: "80vh",
+                                width: "95%",
+                                maxHeight: "80vh",
                                 backgroundColor: "blue",
                             }}
                             src={`${imagePathArray[selectedIndex]}`}
