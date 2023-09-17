@@ -196,7 +196,7 @@ export function MobileArtDisplay(props: {
                             <div>
                                 {props.entries[props.selectedIndex].description
                                     .length < descriptionMaxCharacterLimit ? (
-                                    <div>
+                                    <div style={{ width: width - 20 + "px" }}>
                                         {
                                             props.entries[props.selectedIndex]
                                                 .description
