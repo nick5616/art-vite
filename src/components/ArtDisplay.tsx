@@ -10,9 +10,6 @@ import imgUrl5 from "../../art/Untitled_Artwork3.jpg";
 import imgUrl6 from "../../art/Untitled_Artwork10.jpg";
 // import imgUrl7 from "../../art/angrybird.png";
 import { useMediaQuery } from "@react-hook/media-query";
-import { firstNCharacters } from "../../utils/strings";
-import { IndexOrbs } from "./IndexOrbs";
-import useWindowDimensions from "../hooks/useWindowDimenstions";
 import { MobileArtDisplay } from "./MobileArtDisplay";
 export function ArtDisplay(props: {
     entries: ArtEntry[];
