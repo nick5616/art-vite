@@ -11,6 +11,7 @@ import imgUrl6 from "../../art/Untitled_Artwork10.jpg";
 // import imgUrl7 from "../../art/angrybird.png";
 import { useMediaQuery } from "@react-hook/media-query";
 import { MobileArtDisplay } from "./MobileArtDisplay";
+import useWindowDimensions from "../hooks/useWindowDimenstions";
 export function ArtDisplay(props: {
     entries: ArtEntry[];
     onArtChanged: (vibe: Vibe, paletteIndex: number) => void;
@@ -32,7 +33,7 @@ export function ArtDisplay(props: {
     }, [selectedIndex, setSelectedIndex]);
     // console.log("call from art display");
     const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
-
+    const { width, height } = useWindowDimensions();
     // const [state, dispatch] = React.useReducer(reducer, theme);
     // console.log("state", state);
     const imagePathArray = [
@@ -76,7 +77,7 @@ export function ArtDisplay(props: {
                         justifyContent: "center",
                         alignItems: "center",
                         width: "auto",
-                        maxHeight: "100vh",
+                        maxHeight: 100 * height,
                         backgroundColor: mediaBackgroundColor,
                         // padding: "20px 0",
                     }}
@@ -85,7 +86,6 @@ export function ArtDisplay(props: {
                         <div
                             style={{
                                 width: "50%",
-                                overflow: "auto",
                                 backgroundColor: mediaBackgroundColor,
                                 color: primaryForegroundColor,
                             }}
@@ -139,7 +139,7 @@ export function ArtDisplay(props: {
                                 <img
                                     style={{
                                         maxWidth: "100%",
-                                        maxHeight: "93vh",
+                                        maxHeight: height - 10,
                                     }}
                                     src={`${imagePathArray[selectedIndex]}`}
                                 ></img>
