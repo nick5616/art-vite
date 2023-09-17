@@ -209,7 +209,7 @@ export function MobileArtDisplay(props: {
                                                 (old) => !old,
                                             );
                                         }}
-                                        style={{}}
+                                        style={{ width: width - 20 + "px" }}
                                     >
                                         {
                                             props.entries[props.selectedIndex]
