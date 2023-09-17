@@ -33,7 +33,7 @@ export function ArtDisplay(props: {
     }, [selectedIndex, setSelectedIndex]);
     // console.log("call from art display");
     const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
-    const { width, height } = useWindowDimensions();
+    const { height } = useWindowDimensions();
     // const [state, dispatch] = React.useReducer(reducer, theme);
     // console.log("state", state);
     const imagePathArray = [
