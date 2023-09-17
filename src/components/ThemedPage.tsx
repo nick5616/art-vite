@@ -59,7 +59,7 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             description:
                 "I sketched a duck. Is this what ducks look like? I just pictured one and tried to draw it. I feel like repeatedly doing this, without real-world reference, will create some discrepancies between the sketches and the depictions over time",
             mediaName: "Untitled_Artwork10.jpg",
-            vibe: Vibe.EARTH_DAY_2017,
+            vibe: Vibe.VANILLA,
             index: 5,
             hidden: false,
         },

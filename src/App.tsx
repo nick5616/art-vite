@@ -19,11 +19,14 @@ function App() {
     return (
         <div
             style={{
-                width: "100vw",
+                // width: "100vw",
                 background: pair.colorPair.backgroundColor,
                 color: pair.colorPair.color,
                 display: "flex",
                 alignItems: "center",
+                maxWidth: "100%",
+                // maxHeight: "auto",
+                // backgroundColor: "red",
             }}
         >
             <ThemedPage

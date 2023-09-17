@@ -305,7 +305,7 @@ function pickBackgroundColor(vibe: Vibe, n: number): HslColor {
         case Vibe.EARTH_DAY_2017:
             return { hue, saturation: 70, lightness: 90 };
         case Vibe.BABY_BLUE:
-            return { hue, saturation: 80, lightness: 80 };
+            return { hue, saturation: 30, lightness: 90 };
         case Vibe.PRUSSIAN_BLUE:
             return { hue, saturation: 65, lightness: 90 };
         case Vibe.DEEP_PURPLE:

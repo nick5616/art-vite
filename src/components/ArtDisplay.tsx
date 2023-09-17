@@ -13,6 +13,7 @@ import { useMediaQuery } from "@react-hook/media-query";
 import { firstNCharacters } from "../../utils/strings";
 import { IndexOrbs } from "./IndexOrbs";
 import useWindowDimensions from "../hooks/useWindowDimenstions";
+import { MobileArtDisplay } from "./MobileArtDisplay";
 export function ArtDisplay(props: {
     entries: ArtEntry[];
     onArtChanged: (vibe: Vibe, paletteIndex: number) => void;
@@ -34,8 +35,7 @@ export function ArtDisplay(props: {
     }, [selectedIndex, setSelectedIndex]);
     // console.log("call from art display");
     const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
-    const { width } = useWindowDimensions();
-    const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
+
     // const [state, dispatch] = React.useReducer(reducer, theme);
     // console.log("state", state);
     const imagePathArray = [
@@ -62,61 +62,14 @@ export function ArtDisplay(props: {
 
     const mediaBackgroundColor =
         theme.palette[paletteIndex].colorPair.backgroundColor;
-    const foreground = theme.palette[paletteIndex].colorPair.color;
+    const primaryForegroundColor = theme.palette[paletteIndex].colorPair.color;
     const deviceIsBigWidth = useMediaQuery(
         "only screen and (min-width: 1057px)",
     );
-    const [touchStart, setTouchStart] = React.useState<{
-        x: number;
-        y: number;
-    } | null>(null);
-    const [touchEnd, setTouchEnd] = React.useState<{
-        x: number;
-        y: number;
-    } | null>(null);
-    console.log("touches", touchStart, touchEnd);
-    // const createdOnString = props.entries[selectedIndex].date;
-    const descriptionMaxCharacterLimit = 34;
-    // the required distance between touchStart and touchEnd to be detected as a swipe
-    const minSwipeDistance = 50;
-
-    const onTouchStart = (e: any) => {
-        setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
-        setTouchStart({
-            x: e.targetTouches[0].clientX as number,
-            y: e.targetTouches[0].clientY as number,
-        });
-    };
-
-    const onTouchMove = (e: any) =>
-        setTouchEnd({
-            x: e.targetTouches[0].clientX as number,
-            y: e.targetTouches[0].clientY as number,
-        });
-
-    const onTouchEnd = () => {
-        if (!touchStart || !touchEnd) return;
-        const distanceX = touchStart.x - touchEnd.x;
-        const distanceY = touchStart.y - touchEnd.y;
-
-        const isHorizontalSwipe = Math.abs(distanceX) > Math.abs(distanceY);
-
-        const isLeftSwipe = distanceX > minSwipeDistance && isHorizontalSwipe;
-        const isRightSwipe = distanceX < -minSwipeDistance && isHorizontalSwipe;
-        if (isLeftSwipe || isRightSwipe)
-            console.log("swipe", isLeftSwipe ? "left" : "right");
-        // add your conditional logic here
-        if (isRightSwipe) {
-            setSelectedIndex((old) => {
-                return old === 0 ? props.entries.length - 1 : old - 1;
-            });
-        }
-        if (isLeftSwipe) {
-            setSelectedIndex((old) => {
-                return old === props.entries.length - 1 ? 0 : old + 1;
-            });
-        }
-    };
+    const primaryBackgroundColor =
+        theme.palette[paletteIndex].colorPair.backgroundColor;
+    const secondaryBackgroundColor =
+        theme.palette[secondIndex].colorPair.backgroundColor;
     return (
         <div>
             {deviceIsBigWidth ? (
@@ -137,7 +90,7 @@ export function ArtDisplay(props: {
                                 width: "50%",
                                 overflow: "auto",
                                 backgroundColor: mediaBackgroundColor,
-                                color: foreground,
+                                color: primaryForegroundColor,
                             }}
                         >
                             {props.entries.map((entry, key) => {
@@ -178,7 +131,7 @@ export function ArtDisplay(props: {
                             style={{
                                 width: "50%",
                                 backgroundColor: mediaBackgroundColor,
-                                color: foreground,
+                                color: primaryForegroundColor,
                                 borderRadius: "10px",
                                 padding: "5px",
                             }}
@@ -198,167 +151,20 @@ export function ArtDisplay(props: {
                     </>
                 </div>
             ) : (
-                <div
-                    style={{
-                        // border: "2px dashed black",
-                        height: "100vh",
-                        position: "relative",
-                    }}
-                >
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            backgroundColor:
-                                theme.palette[secondIndex].colorPair
-                                    .backgroundColor,
-                            marginBottom: "10px",
-                        }}
-                    >
-                        <div style={{ marginLeft: "5vw" }}>
-                            <h1
-                                style={{
-                                    fontSize: "20pt",
-                                    padding: 0,
-                                    display: "flex",
-                                    textAlign: "start",
-                                    marginBottom: "0",
-                                }}
-                            >
-                                {props.entries[selectedIndex].title}
-                            </h1>
-
-                            {props.entries[secondIndex].date ? (
-                                <h2
-                                    style={{
-                                        fontSize: "12pt",
-                                        marginTop: "0",
-                                        padding: 0,
-                                    }}
-                                >
-                                    <strong>Created on </strong>
-                                    {props.entries[secondIndex].date}
-                                </h2>
-                            ) : (
-                                <></>
-                            )}
-                        </div>
-                        <IndexOrbs
-                            index={selectedIndex}
-                            length={props.entries.length}
-                            theme={theme}
-                            paletteIndex={paletteIndex}
-                            onSelectedIndexChanged={(
-                                requestedIndex: number,
-                            ) => {
-                                setSelectedIndex(requestedIndex);
-                            }}
-                        ></IndexOrbs>
-                    </div>
-                    {props.entries[selectedIndex].hidden ? (
-                        <>🚧 UNDER CONSTRUCTION 🚧</>
-                    ) : (
-                        <img
-                            style={{
-                                width: "95%",
-                                maxHeight: "80vh",
-                                backgroundColor: "blue",
-                            }}
-                            src={`${imagePathArray[selectedIndex]}`}
-                            onTouchStart={onTouchStart}
-                            onTouchEnd={onTouchEnd}
-                            onTouchMove={onTouchMove}
-                        ></img>
-                    )}
-
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            margin: "0 auto",
-                            position: "absolute",
-                            bottom: 0,
-                            // border: "2px dashed white",
-                        }}
-                    >
-                        <div
-                            style={{
-                                backgroundColor: foreground,
-                                color: mediaBackgroundColor,
-                                padding: "10px",
-                                borderRadius: "10px 10px 0 0",
-                                display: "flex",
-                                alignItems: "center",
-                                margin: "0 auto",
-                                width: width - 20 + "px",
-                                fontSize: "12pt",
-                            }}
-                            onTouchStart={onTouchStart}
-                            onTouchEnd={onTouchEnd}
-                            onTouchMove={onTouchMove}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                }}
-                            >
-                                {descriptionExpanded ||
-                                props.entries[selectedIndex].description
-                                    .length < descriptionMaxCharacterLimit ? (
-                                    <div>
-                                        {props.entries[selectedIndex]
-                                            .description.length <
-                                        descriptionMaxCharacterLimit ? (
-                                            <div>
-                                                {
-                                                    props.entries[selectedIndex]
-                                                        .description
-                                                }
-                                            </div>
-                                        ) : (
-                                            <div
-                                                onClick={() => {
-                                                    setDescriptionExpanded(
-                                                        (old) => !old,
-                                                    );
-                                                }}
-                                                style={{}}
-                                            >
-                                                {
-                                                    props.entries[selectedIndex]
-                                                        .description
-                                                }
-
-                                                <div>
-                                                    <strong> hide</strong>
-                                                </div>
-                                            </div>
-                                        )}
-                                    </div>
-                                ) : (
-                                    <div
-                                        onClick={() => {
-                                            setDescriptionExpanded(
-                                                (old) => !old,
-                                            );
-                                        }}
-                                        style={{ display: "flex" }}
-                                    >
-                                        {firstNCharacters(
-                                            descriptionMaxCharacterLimit,
-                                            props.entries[selectedIndex]
-                                                .description,
-                                        )}
-                                        {"... "}
-                                        <div>
-                                            <strong> see more</strong>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <MobileArtDisplay
+                    onSelectedIndexChanged={(index: number) =>
+                        setSelectedIndex(index)
+                    }
+                    entries={props.entries}
+                    theme={theme}
+                    selectedIndex={selectedIndex}
+                    descriptionExpanded={false}
+                    primaryForegroundColor={primaryForegroundColor}
+                    primaryBackgroundColor={primaryBackgroundColor}
+                    secondaryBackgroundColor={secondaryBackgroundColor}
+                    imagePathArray={imagePathArray}
+                    paletteIndex={paletteIndex}
+                ></MobileArtDisplay>
             )}
         </div>
     );
