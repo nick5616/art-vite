@@ -79,6 +79,8 @@ function getHueValue(vibe: Vibe, hueShiftAmount: number): number {
             return 240 + hueShiftAmount;
         case Vibe.DEEP_PURPLE:
             return 295 + hueShiftAmount;
+        case Vibe.LIMELIGHT:
+            return 40 + hueShiftAmount;
         default:
             return 0 + hueShiftAmount;
     }
@@ -310,6 +312,8 @@ function pickBackgroundColor(vibe: Vibe, n: number): HslColor {
             return { hue, saturation: 65, lightness: 90 };
         case Vibe.DEEP_PURPLE:
             return { hue, saturation: 85, lightness: 10 };
+        case Vibe.LIMELIGHT:
+            return { hue, saturation: 95, lightness: 5 };
         default:
             return { hue, saturation: 70, lightness: 20 };
     }
@@ -596,13 +600,14 @@ export function getColorSchemeFromVibe(vibe: Vibe): ColorScheme {
             return ColorScheme.COMPLEMENTARY;
         case Vibe.DEEP_PURPLE:
             return ColorScheme.TRIADIC;
+        case Vibe.LIMELIGHT:
+            return ColorScheme.SPLIT_COMPLEMENTARY;
         default:
             return ColorScheme.MONOCHROMATIC;
     }
 }
 
 export function getThemeFromVibe(vibe: Vibe): Theme {
-    if (vibe === Vibe.EARTH_DAY_2017) console.log("this is when it happens!");
     if (vibe === Vibe.VANILLA) {
         return {
             scheme: ColorScheme.MONOCHROMATIC,

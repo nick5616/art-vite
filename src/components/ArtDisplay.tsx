@@ -8,7 +8,9 @@ import imgUrl3 from "../../art/Untitled_Artwork11.jpeg";
 import imgUrl4 from "../../art/Untitled_Artwork2.jpg";
 import imgUrl5 from "../../art/Untitled_Artwork3.jpg";
 import imgUrl6 from "../../art/Untitled_Artwork10.jpg";
-// import imgUrl7 from "../../art/angrybird.png";
+import imgUrl8 from "../../art/Untitled-Artwork.jpg";
+import imgUrl7 from "../../art/Untitled-Artwork 1.jpg";
+
 import { useMediaQuery } from "@react-hook/media-query";
 import { MobileArtDisplay } from "./MobileArtDisplay";
 import useWindowDimensions from "../hooks/useWindowDimenstions";
@@ -43,7 +45,8 @@ export function ArtDisplay(props: {
         imgUrl4,
         imgUrl5,
         imgUrl6,
-        // imgUrl7,
+        imgUrl7,
+        imgUrl8,
     ];
     const paletteIndex = generateRandomNumberExcluding(
         [],

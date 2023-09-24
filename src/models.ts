@@ -27,6 +27,7 @@ export enum Vibe {
     PRUSSIAN_BLUE = "PRUSSIAN_BLUE",
     DEEP_PURPLE = "DEEP_PURPLE",
     VANILLA = "VANILLA",
+    LIMELIGHT = "LIMELIGHT",
 }
 
 export interface RgbColor {
