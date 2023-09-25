@@ -25,7 +25,7 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             mediaName: "Untitled_Artwork8.jpg",
             vibe: Vibe.BABY_BLUE,
             index: 1,
-            date: "10/20/2022",
+            date: "10/23/2022",
             hidden: false,
         },
         {
@@ -34,7 +34,7 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             mediaName: "Untitled_Artwork11.jpg",
             vibe: Vibe.DEEP_PURPLE,
             index: 2,
-            date: "08/12/2022",
+            date: "08/27/2022",
             hidden: false,
         },
         {
