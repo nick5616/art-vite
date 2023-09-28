@@ -13,6 +13,16 @@ export function Introduction(props: {
         props.pageTheme.scheme === ColorScheme.MONOCHROMATIC
             ? []
             : [props.chosenPaletteIndex];
+    const highlightColor =
+        props.pageTheme.palette.length === 1
+            ? props.pageTheme.palette[0].colorPair.color
+            : props.pageTheme.palette[
+                  generateRandomNumberExcluding(
+                      [props.chosenPaletteIndex],
+                      props.pageTheme.palette.length,
+                  )
+              ].colorPair.color;
+
     return (
         <div
             className="page-view"
@@ -40,7 +50,17 @@ export function Introduction(props: {
                 }}
             >
                 <div>
-                    <h1 className="serif heading">Hi! I'm Nick,</h1>
+                    <h1 className="serif heading">
+                        Hi! I'm{" "}
+                        <a
+                            style={{ color: highlightColor }}
+                            href="https://github.com/nick5616"
+                            target="_blank"
+                        >
+                            Nick
+                        </a>
+                        ,
+                    </h1>
                     <h2 className="serif">
                         I hope you enjoy my art. I sure do enjoy drawing it 👼🏼📲
                     </h2>
