@@ -15,9 +15,7 @@ export function ExpandableDescription(props: {
     }
     const descriptionRef = React.createRef<HTMLDivElement>();
     const descriptionOverflowed: boolean =
-        useIsOverflow(descriptionRef, () => {
-            console.log("description overflowed");
-        }) ?? false;
+        useIsOverflow(descriptionRef, () => {}) ?? false;
     return expanded ? (
         <div
             style={{

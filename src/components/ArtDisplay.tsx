@@ -94,22 +94,6 @@ export function ArtDisplay(props: {
                                         onCardClicked={(index: number) =>
                                             setSelectedIndex(index)
                                         }
-                                        onUpClicked={(index: number) => {
-                                            console.log(
-                                                "up clicked",
-                                                selectedIndex,
-                                                index,
-                                            );
-                                            setSelectedIndex(selectedIndex - 1);
-                                        }}
-                                        onDownClicked={(index: number) => {
-                                            console.log("down clikced", index);
-                                            setSelectedIndex(index + 1);
-                                            console.log(
-                                                "selectedIndex",
-                                                selectedIndex,
-                                            );
-                                        }}
                                         selected={selectedIndex === entry.index}
                                         vibe={props.entries[selectedIndex].vibe}
                                         key={key}

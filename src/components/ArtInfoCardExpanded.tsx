@@ -15,7 +15,6 @@ export function ArtInfoCardExpanded(props: {
     onCollapseToggled: () => void;
 }) {
     const theme = getThemeFromVibe(props.vibe);
-    console.log("🐽 I smell a truffle theme!!", theme);
 
     const isMonochromatic = theme.palette.length === 1;
 

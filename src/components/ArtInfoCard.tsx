@@ -4,8 +4,6 @@ import { ExpandableDescription } from "./ExpandableDescription";
 
 export function ArtInfoCard(props: {
     index: number;
-    onUpClicked: (index: number) => void;
-    onDownClicked: (index: number) => void;
 
     title: string;
     description: string;

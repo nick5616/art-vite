@@ -13,8 +13,6 @@ export function ArtInfoCardController(props: {
     paletteIndex: number;
     date: string | undefined;
     onCardClicked: (index: number) => void;
-    onUpClicked: (index: number) => void;
-    onDownClicked: (index: number) => void;
 }) {
     const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
     const theme = getThemeFromVibe(props.vibe);
@@ -60,8 +58,6 @@ export function ArtInfoCardController(props: {
                     description={props.description}
                     index={props.index}
                     date={props.date}
-                    onUpClicked={props.onUpClicked}
-                    onDownClicked={props.onDownClicked}
                     selected={props.selected}
                 ></ArtInfoCard>
             ) : (
