@@ -15,7 +15,7 @@ export function ArtInfoCard(props: {
     selected: boolean;
 }) {
     return (
-        <div style={{ display: "flex", width: "100%" }}>
+        <div style={{ display: "flex", width: "100%", scrollMargin: 0 }}>
             <div
                 style={{
                     display: "flex",

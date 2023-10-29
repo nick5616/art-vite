@@ -75,7 +75,7 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             vibe: Vibe.BABY_BLUE,
             date: "09/24/23",
             index: 6,
-            hidden: false,
+            hidden: true,
         },
         {
             title: "Sleepytime Tree",
