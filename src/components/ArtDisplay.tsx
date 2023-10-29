@@ -58,7 +58,7 @@ export function ArtDisplay(props: {
         theme.palette[paletteIndex].colorPair.backgroundColor;
     const primaryForegroundColor = theme.palette[paletteIndex].colorPair.color;
     const deviceIsBigWidth = useMediaQuery(
-        "only screen and (min-width: 1550px)",
+        "only screen and (min-width: 1200px)",
     );
     const primaryBackgroundColor =
         theme.palette[paletteIndex].colorPair.backgroundColor;
