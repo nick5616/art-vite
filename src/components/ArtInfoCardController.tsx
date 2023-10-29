@@ -17,13 +17,8 @@ export function ArtInfoCardController(props: {
     onDownClicked: (index: number) => void;
 }) {
     const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
-    // console.log("in info card controller");
     const theme = getThemeFromVibe(props.vibe);
-    // console.log("🐽 I smell a truffle theme!!", theme);
-    // const randomPaletteIndex = generateRandomNumberExcluding(
-    //     [props.paletteIndex],
-    //     theme.palette.length - 1,
-    // );
+
     const isMonochromatic = theme.palette.length === 1;
 
     const randomPaletteIndex = isMonochromatic
@@ -32,36 +27,24 @@ export function ArtInfoCardController(props: {
               [props.paletteIndex],
               theme.palette.length,
           );
-    // console.log(
-    //     "🐝 NOT-PALETTE INDEX of info card controller",
-    //     randomPaletteIndex,
-    // );
-    let backgroundColor = props.selected
+
+    const backgroundColor = props.selected
         ? theme.palette[randomPaletteIndex].colorPair.color
         : "inherit";
-    let color = props.selected
+    const color = props.selected
         ? theme.palette[randomPaletteIndex].colorPair.backgroundColor
         : "inherit";
-    // if (!isMonochromatic) {
-    //     backgroundColor = props.selected
-    //         ? theme.palette[randomPaletteIndex].backgroundColor
-    //         : "inherit";
-    //     color = props.selected
-    //         ? theme.palette[randomPaletteIndex].color
-    //         : "inherit";
-    // }
-    // const border = props.selected ? "1px solid " + color : "none";
 
     return (
         <div
             style={{
                 color,
                 backgroundColor,
-                padding: "10px",
+                padding: "20px",
                 margin: "0 10px",
                 marginLeft: "50px",
 
-                borderRadius: "10px",
+                borderRadius: "50px",
                 display: "flex",
             }}
             onClick={() => {
@@ -85,10 +68,6 @@ export function ArtInfoCardController(props: {
                 <ArtInfoCardExpanded
                     title={props.title}
                     onCollapseToggled={() => {
-                        // console.log(
-                        //     "collapse toggled, old:",
-                        //     descriptionExpanded,
-                        // );
                         setDescriptionExpanded(!descriptionExpanded);
                     }}
                     description={props.description}

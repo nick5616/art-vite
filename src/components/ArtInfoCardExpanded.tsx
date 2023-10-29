@@ -16,10 +16,7 @@ export function ArtInfoCardExpanded(props: {
 }) {
     const theme = getThemeFromVibe(props.vibe);
     console.log("🐽 I smell a truffle theme!!", theme);
-    // const randomPaletteIndex = generateRandomNumberExcluding(
-    //     [props.paletteIndex],
-    //     theme.palette.length - 1,
-    // );
+
     const isMonochromatic = theme.palette.length === 1;
 
     const randomPaletteIndex = isMonochromatic
@@ -28,27 +25,19 @@ export function ArtInfoCardExpanded(props: {
               [props.paletteIndex],
               theme.palette.length,
           );
-    // let backgroundColor = props.selected ? theme.palette[0].color : "inherit";
-    // let color = props.selected ? theme.palette[0].backgroundColor : "inherit";
-    // if (!isMonochromatic) {
-    let backgroundColor = props.selected
+
+    const backgroundColor = props.selected
         ? theme.palette[randomPaletteIndex].colorPair.backgroundColor
         : "inherit";
-    let color = props.selected
-        ? theme.palette[randomPaletteIndex].colorPair.color
-        : "inherit";
-    // }
-    console.log("bg c", backgroundColor, color);
 
     return (
         <div
-            className="pookie"
             style={{
                 color: backgroundColor,
-                // backgroundColor: color,
                 padding: "10px",
                 margin: "auto",
                 borderRadius: "10px",
+                width: "100%",
                 // display: "flex",
             }}
             onClick={() => {
@@ -73,6 +62,7 @@ export function ArtInfoCardExpanded(props: {
                         // display: "flex",
                         // borderRight: "1px solid" + color,
                         marginLeft: 0,
+                        marginBottom: "10px",
                         textAlign: "start",
                     }}
                 >
@@ -80,10 +70,12 @@ export function ArtInfoCardExpanded(props: {
                 </h1>
             </div>
             <div
-                style={{
-                    // display: "flex",
-                    paddingLeft: "10px",
-                }}
+                style={
+                    {
+                        // display: "flex",
+                        // paddingLeft: "10px",
+                    }
+                }
             >
                 <div>
                     <div
@@ -100,8 +92,8 @@ export function ArtInfoCardExpanded(props: {
                     </div>
                     <div
                         style={{
-                            margin: "0 auto",
-                            transition: "color 0.5s ease",
+                            textAlign: "start",
+                            marginTop: "5px",
                         }}
                         onClick={() => {
                             props.onCollapseToggled();

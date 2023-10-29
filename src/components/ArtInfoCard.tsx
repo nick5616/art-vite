@@ -19,6 +19,7 @@ export function ArtInfoCard(props: {
             style={{
                 display: "flex",
                 width: "100%",
+                borderRadius: "50px",
             }}
         >
             <div
@@ -27,14 +28,7 @@ export function ArtInfoCard(props: {
                     alignItems: "center",
                     paddingRight: "10px",
                 }}
-            >
-                {/* <div>
-                    <div onClick={() => props.onUpClicked(props.index)}>Up</div>
-                    <div onClick={() => props.onDownClicked(props.index)}>
-                        Down
-                    </div>
-                </div> */}
-            </div>
+            ></div>
             <ArtTitle title={props.title}></ArtTitle>
             <div
                 style={{
@@ -43,7 +37,7 @@ export function ArtInfoCard(props: {
                     width: "100%",
                 }}
             >
-                <div style={{}}>
+                <div>
                     <ExpandableDescription
                         description={props.description}
                         expandRequested={() => {

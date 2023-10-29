@@ -21,23 +21,20 @@ export function ArtDisplay(props: {
     const [selectedIndex, setSelectedIndex] = React.useState(
         Math.floor(Math.random() * props.entries.length),
     );
-    // const mediaBackgroundColor = getRandomBackgroundColorFromPalette(
-    //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
-    // );
-    // const foreground = getRandomColorFromPalette(
-    //     getThemeFromVibe(props.entries[selectedIndex].vibe).palette,
-    // );
+
+    const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
+    const paletteIndex = generateRandomNumberExcluding(
+        [],
+        theme.palette.length,
+    );
 
     React.useEffect(() => {
         const vibe = props.entries[selectedIndex].vibe;
         props.onArtChanged(vibe, paletteIndex);
-        // dispatch({ newVibe: vibe });
-    }, [selectedIndex, setSelectedIndex]);
-    // console.log("call from art display");
-    const theme = getThemeFromVibe(props.entries[selectedIndex].vibe);
+    }, [selectedIndex, setSelectedIndex, props, paletteIndex]);
+
     const { height } = useWindowDimensions();
-    // const [state, dispatch] = React.useReducer(reducer, theme);
-    // console.log("state", state);
+
     const imagePathArray = [
         imgUrl,
         imgUrl2,
@@ -48,10 +45,6 @@ export function ArtDisplay(props: {
         imgUrl7,
         imgUrl8,
     ];
-    const paletteIndex = generateRandomNumberExcluding(
-        [],
-        theme.palette.length,
-    );
 
     const secondIndex =
         theme.palette.length === 1
@@ -82,7 +75,6 @@ export function ArtDisplay(props: {
                         width: "auto",
                         maxHeight: 100 * height,
                         backgroundColor: mediaBackgroundColor,
-                        // padding: "20px 0",
                     }}
                 >
                     <>
@@ -130,6 +122,7 @@ export function ArtDisplay(props: {
                         <div
                             style={{
                                 width: "50%",
+                                height: height - 50,
                                 backgroundColor: mediaBackgroundColor,
                                 color: primaryForegroundColor,
                                 borderRadius: "10px",
@@ -141,8 +134,8 @@ export function ArtDisplay(props: {
                             ) : (
                                 <img
                                     style={{
-                                        maxWidth: "100%",
-                                        maxHeight: height - 10,
+                                        maxWidth: "auto",
+                                        maxHeight: height - 70,
                                     }}
                                     src={`${imagePathArray[selectedIndex]}`}
                                 ></img>
