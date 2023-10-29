@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { ColorScheme, Theme } from "../models";
 import { generateRandomNumberExcluding } from "../theme";
 import { RenderTheme } from "./RenderTheme";
+
 import "./styles/introduction.css";
 export function Introduction(props: {
     pageTheme: Theme;
@@ -64,10 +65,18 @@ export function Introduction(props: {
                     <h2 className="serif">
                         I hope you enjoy my art. I sure do enjoy drawing it 👼🏼📲
                     </h2>
-                    <RenderTheme
-                        pageTheme={props.pageTheme}
-                        devMode={false}
-                    ></RenderTheme>
+                    <div
+                        style={{
+                            paddingTop: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                        }}
+                    >
+                        <RenderTheme
+                            pageTheme={props.pageTheme}
+                            devMode={false}
+                        ></RenderTheme>
+                    </div>
                 </div>
             </div>
         </div>
