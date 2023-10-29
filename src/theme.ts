@@ -10,35 +10,12 @@ import {
     Vibe,
 } from "./models";
 
-//import Color from "ac-colors";
-
-// const RED = 0.2126;
-// const GREEN = 0.7152;
-// const BLUE = 0.0722;
-
-// const GAMMA = 2.4;
-
-// function luminance(r: number, g: number, b: number) {
-//     var a = [r, g, b].map((v) => {
-//         v /= 255;
-//         return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, GAMMA);
-//     });
-//     return a[0] * RED + a[1] * GREEN + a[2] * BLUE;
-// }
-
-// function contrast(rgb1: RgbColor, rgb2: RgbColor) {
-//     var lum1 = luminance(rgb1.red, rgb1.green, rgb1.blue);
-//     var lum2 = luminance(rgb2.red, rgb2.green, rgb2.blue);
-//     var brightest = Math.max(lum1, lum2);
-//     var darkest = Math.min(lum1, lum2);
-//     return (brightest + 0.05) / (darkest + 0.05);
-// }
-
 const PIGMENT_MODIFICATION_AMOUNT = 2;
 
 export function rgbAsString(color: RgbColor): string {
     return "rgb(" + color.red + "," + color.green + "," + color.blue + ")";
 }
+
 /*  
                 getThemeFromVibe(vibe)
                         |
@@ -57,8 +34,8 @@ export function rgbAsString(color: RgbColor): string {
        /            |                 \
       /             |                   \              
 getHueValue + getSaturationValue + getLightnessValue
-
 */
+
 /**
  *
  * @param vibe
@@ -94,9 +71,9 @@ export function accessibleContrastRatio(color1: RgbColor, color2: RgbColor) {
 }
 
 export function contrastRatio(lum1: number, lum2: number) {
-    let l1 = Math.max(lum1, lum2);
-    let l2 = Math.min(lum1, lum2);
-    let cr = (l1 + 0.05) / (l2 + 0.05);
+    const l1 = Math.max(lum1, lum2);
+    const l2 = Math.min(lum1, lum2);
+    const cr = (l1 + 0.05) / (l2 + 0.05);
     return cr;
 }
 
@@ -108,12 +85,14 @@ export function rgbToHsl(rgb: RgbColor): HslColor {
     g /= 255;
     b /= 255;
 
-    let cmin = Math.min(r, g, b),
-        cmax = Math.max(r, g, b),
-        delta = cmax - cmin,
-        h = 0,
-        s = 0,
-        l = 0;
+    const cmin = Math.min(r, g, b);
+    const cmax = Math.max(r, g, b);
+    const delta = cmax - cmin;
+
+    let h = 0;
+    let s = 0;
+    let l = 0;
+
     if (delta == 0) {
         h = 0;
     } else if (cmax == r) {
@@ -126,7 +105,10 @@ export function rgbToHsl(rgb: RgbColor): HslColor {
 
     h = Math.round(h * 60);
 
-    if (h < 0) h += 360;
+    if (h < 0) {
+        h += 360;
+    }
+
     l = (cmax + cmin) / 2;
 
     s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
@@ -145,12 +127,13 @@ export function hslToRgb(hsl: HslColor): RgbColor {
     const s = hsl.saturation / 100;
     const l = hsl.lightness / 100;
 
-    let c = (1 - Math.abs(2 * l - 1)) * s,
-        x = c * (1 - Math.abs(((hsl.hue / 60) % 2) - 1)),
-        m = l - c / 2,
-        r = 0,
-        g = 0,
-        b = 0;
+    const c = (1 - Math.abs(2 * l - 1)) * s;
+    const x = c * (1 - Math.abs(((hsl.hue / 60) % 2) - 1));
+    const m = l - c / 2;
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
     if (0 <= hsl.hue && hsl.hue < 60) {
         r = c;
         g = x;
@@ -224,7 +207,6 @@ function relativeLuminance(color: RgbColor) {
 
 export function lightenColor(color: HslColor): HslColor {
     const lightenedLightness = color.lightness + PIGMENT_MODIFICATION_AMOUNT;
-    console.log("new lightness", lightenedLightness);
 
     if (lightenedLightness > 100) {
         return {
@@ -344,7 +326,9 @@ function getHueShiftAmount(
         case ColorScheme.TRIADIC:
             return timesShifted * 120;
         default:
-            console.log("default");
+            console.warn(
+                "Not a recognized color scheme. Default switch behavior in getHueShiftAmount. ",
+            );
             return 0;
     }
 }
@@ -361,8 +345,6 @@ function satisfactoryContrastRatio(
     rgbColor1: RgbColor,
     rgbColor2: RgbColor,
 ): boolean {
-    // const y1 = relativeLuminance(rgbColor1);
-    // const y2 = relativeLuminance(rgbColor2);
     return (
         contrastRatio(
             relativeLuminance(rgbColor1),
@@ -375,6 +357,7 @@ export function hslToRgb2(hsl: HslColor): RgbColor {
     let h = hsl.hue;
     let s = hsl.saturation;
     let l = hsl.lightness;
+
     // Any nonfinite hsl is reset to 0
     if (!isFinite(h)) {
         h = 0;
@@ -385,6 +368,7 @@ export function hslToRgb2(hsl: HslColor): RgbColor {
     if (!isFinite(l)) {
         l = 0;
     }
+
     // Hue has a period of 360deg, if hue is negative, get positive hue
     // by scaling h to (-360,0) and adding 360
     h = h < 0 ? (h % 360) + 360 : h;
@@ -409,6 +393,7 @@ export function hslToRgb2(hsl: HslColor): RgbColor {
     } else {
         rgb1 = [c, 0, x];
     }
+
     // Add zero to prevent signed zeros (force 0 rather than -0)
     const rgb = rgb1.map((val) => Math.round((val + m) * 255) + 0);
     return { red: rgb[0], green: rgb[1], blue: rgb[2] };
@@ -418,12 +403,7 @@ export function generateAccessibleColorFromBackground(
     backgroundColor: HslColor,
 ): AccessibleHslColor {
     let color = addContrastToForeground(backgroundColor);
-    let accessible = true;
-    const contrastRatioAcceptable = satisfactoryContrastRatio(
-        hslToRgb2(color),
-        hslToRgb2(backgroundColor),
-    );
-    console.log("contrast ratio acceptable", contrastRatioAcceptable);
+
     while (
         !satisfactoryContrastRatio(hslToRgb2(color), hslToRgb2(backgroundColor))
     ) {
@@ -432,16 +412,6 @@ export function generateAccessibleColorFromBackground(
                 color = lightenColor(color);
             } else {
                 color.lightness = 100;
-                let cr = contrastRatio(
-                    relativeLuminance(hslToRgb2(color)),
-                    relativeLuminance(hslToRgb2(backgroundColor)),
-                );
-                if (cr < 4.5) {
-                    console.log(
-                        "🚨the final color combo was found to be inaccessible",
-                    );
-                    accessible = true;
-                }
                 break;
             }
         } else {
@@ -449,44 +419,16 @@ export function generateAccessibleColorFromBackground(
                 color = darkenColor(color);
             } else {
                 color.lightness = 0;
-                // let cr = contrastRatio(
-                //     relativeLuminance(hslToRgb(color)),
-                //     relativeLuminance(hslToRgb(backgroundColor)),
-                // );
-                // if (cr < 4.5) {
-                //     console.log(
-                //         "🚨the final color combo was found to be inaccessible",
-                //     );
-                //     accessible = true;
-                // }
                 break;
             }
         }
     }
-    // const contrastRatioAcceptableAfterLoop = satisfactoryContrastRatio(
-    //     hslToRgb2(color),
-    //     hslToRgb2(backgroundColor),
-    // );
-    // console.log(
-    //     "contrast ratio acceptable after while loop",
-    //     contrastRatioAcceptableAfterLoop,
-    // );
-    let cr = contrastRatio(
+
+    const cr = contrastRatio(
         relativeLuminance(hslToRgb2(color)),
         relativeLuminance(hslToRgb2(backgroundColor)),
     );
 
-    // const c1 = new Color({
-    //     color: [color.hue, color.lightness, color.saturation],
-    //     type: "hsl",
-    // });
-
-    // let newCr = contrastRatio();
-    // console.log("🤨 CONTEST", contest);
-    // console.log("with new rgb algo", cr);
-    if (!accessible) {
-        throw new Error("could not generate an accessible color scheme");
-    }
     return {
         color,
         isAccessible: cr >= 7,
@@ -495,10 +437,10 @@ export function generateAccessibleColorFromBackground(
 }
 
 /**
- * TODO: Generalize this function to `generateColorScheme`
- * Then provide the configuration scheme as an optional argument.
- * @param backgroundColor
- * @param **Future:** Color scheme
+ * @param vibe used to obtain the `main` background color the entire theme is based off.
+ * Other backgrounds are phase-shifted off this one.
+ * Foreground colors are dynamically accessibly generated
+ * @param scheme
  * (Monochromatic, Analogous, Complementary, Split-complementary, Triadic, Square, Rectangle)
  * @returns
  */
@@ -510,7 +452,6 @@ export function generateColorPalette(
     const colorPairs: AccessibleColorPair[] = [];
     for (let n = 0; n < numColors; n++) {
         const backgroundColor = pickBackgroundColor(vibe, n);
-        // console.log("picked backgroundColor", backgroundColor);
         let accessibleColor =
             generateAccessibleColorFromBackground(backgroundColor);
         const triedIndeces = [n];
@@ -623,7 +564,6 @@ export function getThemeFromVibe(vibe: Vibe): Theme {
     const scheme = getColorSchemeFromVibe(vibe);
 
     const palette = generateColorPalette(vibe, scheme);
-    // console.log("palette", palette);
     const theme: Theme = {
         scheme,
         palette,
