@@ -136,12 +136,23 @@ export function MobileArtDisplay(props: {
                 ></IndexOrbs>
             </div>
             {props.entries[props.selectedIndex].hidden ? (
-                <>🚧 UNDER CONSTRUCTION 🚧</>
+                <h1
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                        fontSize: "20pt",
+                    }}
+                >
+                    🚧 UNDER CONSTRUCTION 🚧
+                </h1>
             ) : (
                 <div
                     style={{
-                        width: 0.95 * width,
-                        height: (80 / 100) * height,
+                        width: 0.9 * width,
+                        height: (84 / 100) * height,
                         display: "flex",
                         alignItems: "center",
                         margin: "auto",
@@ -153,7 +164,7 @@ export function MobileArtDisplay(props: {
                         onTouchEnd={onTouchEnd}
                         onTouchMove={onTouchMove}
                         style={{
-                            maxWidth: 0.95 * width,
+                            maxWidth: 0.9 * width,
                             maxHeight: (80 / 100) * height,
                         }}
                     ></img>

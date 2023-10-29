@@ -130,7 +130,18 @@ export function ArtDisplay(props: {
                             }}
                         >
                             {props.entries[selectedIndex].hidden ? (
-                                <>🚧 UNDER CONSTRUCTION 🚧</>
+                                <h1
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        height: "100%",
+                                        fontSize: "20pt",
+                                    }}
+                                >
+                                    🚧 UNDER CONSTRUCTION 🚧
+                                </h1>
                             ) : (
                                 <img
                                     style={{
