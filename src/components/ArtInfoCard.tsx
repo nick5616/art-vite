@@ -8,7 +8,8 @@ export function ArtInfoCard(props: {
     title: string;
     description: string;
     onCollapseToggled: () => void;
-
+    onInfoCardClicked: () => void;
+    descriptionOverflowed: () => void;
     date?: string;
     selected: boolean;
 }) {
@@ -19,6 +20,7 @@ export function ArtInfoCard(props: {
                 width: "100%",
                 borderRadius: "50px",
             }}
+            onClick={() => props.onInfoCardClicked}
         >
             <div
                 style={{
@@ -42,6 +44,7 @@ export function ArtInfoCard(props: {
                             props.onCollapseToggled();
                         }}
                         selected={props.selected}
+                        descriptionOverflowed={props.descriptionOverflowed}
                     ></ExpandableDescription>
                 </div>
                 <div style={{ margin: "0 0 0 auto" }}>

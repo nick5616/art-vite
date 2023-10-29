@@ -1,4 +1,5 @@
 import * as React from "react";
+import useWindowDimensions from "../hooks/useWindowDimenstions";
 import { ColorScheme, Theme } from "../models";
 import { generateRandomNumberExcluding } from "../theme";
 
@@ -21,6 +22,7 @@ export function IndexOrbs(props: {
         gorp: 1,
         jorp: "Off the charts",
     });
+    const { width } = useWindowDimensions();
     return (
         <div
             style={{
@@ -49,10 +51,10 @@ export function IndexOrbs(props: {
                     >
                         <div
                             style={{
-                                width: "10px",
-                                height: "10px",
-                                borderRadius: "10px",
-                                paddingRight: "5px",
+                                width: width / 35,
+                                height: width / 35,
+                                borderRadius: `${width / 5}px`,
+
                                 backgroundColor:
                                     index === props.index
                                         ? props.theme.palette[paletteIndex]

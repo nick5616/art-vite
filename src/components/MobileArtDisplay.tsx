@@ -69,6 +69,7 @@ export function MobileArtDisplay(props: {
                 height: `${height}px`,
                 width: `${width}px`,
                 position: "relative",
+                backgroundColor: props.primaryBackgroundColor,
             }}
         >
             <div
@@ -76,6 +77,7 @@ export function MobileArtDisplay(props: {
                     display: "flex",
                     justifyContent: "space-between",
                     backgroundColor: props.secondaryBackgroundColor,
+
                     marginBottom: "10px",
                 }}
             >
@@ -152,6 +154,7 @@ export function MobileArtDisplay(props: {
                         display: "flex",
                         alignItems: "center",
                         margin: "auto",
+                        justifyContent: "center",
                     }}
                 >
                     <img

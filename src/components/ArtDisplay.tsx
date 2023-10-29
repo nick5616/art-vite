@@ -33,7 +33,7 @@ export function ArtDisplay(props: {
         props.onArtChanged(vibe, paletteIndex);
     }, [selectedIndex, setSelectedIndex, props, paletteIndex]);
 
-    const { height } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
 
     const imagePathArray = [
         imgUrl,
@@ -58,7 +58,7 @@ export function ArtDisplay(props: {
         theme.palette[paletteIndex].colorPair.backgroundColor;
     const primaryForegroundColor = theme.palette[paletteIndex].colorPair.color;
     const deviceIsBigWidth = useMediaQuery(
-        "only screen and (min-width: 1057px)",
+        "only screen and (min-width: 1550px)",
     );
     const primaryBackgroundColor =
         theme.palette[paletteIndex].colorPair.backgroundColor;
@@ -83,6 +83,9 @@ export function ArtDisplay(props: {
                                 width: "50%",
                                 backgroundColor: mediaBackgroundColor,
                                 color: primaryForegroundColor,
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: "10px",
                             }}
                         >
                             {props.entries.map((entry, key) => {
@@ -111,6 +114,9 @@ export function ArtDisplay(props: {
                                 color: primaryForegroundColor,
                                 borderRadius: "10px",
                                 padding: "5px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
                             }}
                         >
                             {props.entries[selectedIndex].hidden ? (
@@ -129,7 +135,7 @@ export function ArtDisplay(props: {
                             ) : (
                                 <img
                                     style={{
-                                        maxWidth: "auto",
+                                        maxWidth: width - 500,
                                         maxHeight: height - 70,
                                     }}
                                     src={`${imagePathArray[selectedIndex]}`}

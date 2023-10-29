@@ -6,6 +6,7 @@ export function ExpandableDescription(props: {
     description: string;
     selected: boolean;
     expandRequested: (expanded: boolean) => void;
+    descriptionOverflowed: () => void;
 }) {
     const [expanded, setExpanded] = React.useState(true);
     const { width } = useWindowDimensions();
@@ -16,6 +17,9 @@ export function ExpandableDescription(props: {
     const descriptionRef = React.createRef<HTMLDivElement>();
     const descriptionOverflowed: boolean =
         useIsOverflow(descriptionRef, () => {}) ?? false;
+    if (descriptionOverflowed) {
+        props.descriptionOverflowed();
+    }
     return expanded ? (
         <div
             style={{
@@ -39,17 +43,6 @@ export function ExpandableDescription(props: {
             >
                 {props.description}{" "}
             </div>
-            {props.selected && descriptionOverflowed ? (
-                <span
-                    onClick={() => {
-                        props.expandRequested(expanded);
-                    }}
-                >
-                    <strong>see more</strong>
-                </span>
-            ) : (
-                <></>
-            )}
         </div>
     );
 }

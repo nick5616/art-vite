@@ -15,6 +15,9 @@ export function ArtInfoCardController(props: {
     onCardClicked: (index: number) => void;
 }) {
     const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
+    const [descriptionOverflowed, setDescriptionOverflowed] =
+        React.useState(false);
+
     const theme = getThemeFromVibe(props.vibe);
 
     const isMonochromatic = theme.palette.length === 1;
@@ -46,7 +49,17 @@ export function ArtInfoCardController(props: {
                 display: "flex",
             }}
             onClick={() => {
+                if (
+                    !descriptionExpanded &&
+                    props.selected &&
+                    descriptionOverflowed
+                ) {
+                    setDescriptionExpanded(true);
+                }
                 props.onCardClicked(props.index);
+                // setDescriptionExpanded(
+                //     (descriptionExpanded) => !descriptionExpanded,
+                // );
             }}
         >
             {!(descriptionExpanded && props.selected) ? (
@@ -59,6 +72,14 @@ export function ArtInfoCardController(props: {
                     index={props.index}
                     date={props.date}
                     selected={props.selected}
+                    onInfoCardClicked={() => {
+                        setDescriptionExpanded(
+                            (descriptionExpanded) => !descriptionExpanded,
+                        );
+                    }}
+                    descriptionOverflowed={() => {
+                        setDescriptionOverflowed(true);
+                    }}
                 ></ArtInfoCard>
             ) : (
                 <ArtInfoCardExpanded
@@ -72,7 +93,13 @@ export function ArtInfoCardController(props: {
                     vibe={props.vibe}
                     paletteIndex={props.paletteIndex}
                     date={props.date}
-                    onCardClicked={props.onCardClicked}
+                    onCardClicked={() => {
+                        setDescriptionExpanded(
+                            (descriptionExpanded) => !descriptionExpanded,
+                        );
+
+                        return props.onCardClicked;
+                    }}
                 ></ArtInfoCardExpanded>
             )}
         </div>
