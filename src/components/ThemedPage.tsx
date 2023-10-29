@@ -87,14 +87,6 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             index: 7,
             hidden: false,
         },
-        // {
-        //     title: "New post",
-        //     description: "I stupidasss bee, hates mondays",
-        //     mediaName: "not used",
-        //     vibe: Vibe.ITS_CORN,
-        //     index: 6,
-        //     hidden: false,
-        // },
     ];
 
     return data;
@@ -110,28 +102,9 @@ export function ThemedPage(props: {
     useEffect(() => {
         props.onPageThemeDetermined(pageTheme);
     }, [pageVibe, setPageVibe]);
-    // const chosenIndex = generateRandomNumberExcluding(
-    //     [],
-    //     pageTheme.palette.length,
-    // );
-    // console.log("page vibe", pageVibe);
-    // const isMonochromatic = pageTheme.palette.length === 1;
-    // const backgroundColor = isMonochromatic
-    //     ? pageTheme.palette[0].color
-    //     : pageTheme.palette[chosenPaletteIndex].backgroundColor;
-    // const foreground = isMonochromatic
-    //     ? pageTheme.palette[0].backgroundColor
-    //     : pageTheme.palette[chosenPaletteIndex].color;
 
     return (
-        <div
-            style={
-                {
-                    // background: "red",
-                    // color: foreground,
-                }
-            }
-        >
+        <div>
             <Introduction
                 pageTheme={pageTheme}
                 chosenPaletteIndex={chosenPaletteIndex}
@@ -139,14 +112,8 @@ export function ThemedPage(props: {
             <ArtDisplay
                 entries={entries}
                 onArtChanged={(vibe, paletteIndex) => {
-                    // console.log(
-                    //     "art changed. vibe paletteIndex",
-                    //     vibe,
-                    //     paletteIndex,
-                    // );
                     setPageVibe(vibe);
                     setChosenPaletteIndex(paletteIndex);
-                    // console.log("CHOSEN PALETTE", chosenPaletteIndex);
                 }}
             ></ArtDisplay>
         </div>

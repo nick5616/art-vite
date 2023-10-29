@@ -11,7 +11,6 @@ export function RenderTheme(props: { pageTheme: Theme; devMode: boolean }) {
         >
             {props.pageTheme.palette.map(
                 (accessibleColorPair: AccessibleColorPair, index: number) => {
-                    // console.log("color pair", accessibleColorPair);
                     return (
                         <div key={index}>
                             <div

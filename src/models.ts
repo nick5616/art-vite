@@ -48,8 +48,6 @@ export interface AccessibleHslColor {
     contrastRatio?: number;
 }
 
-// type RgbColorPigment = RgbComponentValue;
-
 export enum ColorScheme {
     MONOCHROMATIC = "MONOCHROMATIC",
     ANALOGOUS = "ANALOGOUS",
@@ -70,34 +68,6 @@ export interface AccessibleColorPair {
     isAccessible: boolean;
     contrastRatio?: number;
 }
-
-// export interface MonochromaticTheme extends Theme {
-//     type: ThemeType.MONOCHROMATIC;
-// }
-
-// export interface AnalogousTheme extends Theme {
-//     type: ThemeType.ANALOGOUS;
-// }
-
-// export interface ComplementaryTheme extends Theme {
-//     type: ThemeType.COMPLEMTENTARY;
-// }
-
-// export interface SplitComplementaryTheme extends Theme {
-//     type: ThemeType.SPLIT_COMPLEMENTARY;
-// }
-
-// export interface TriadicComplementaryTheme extends Theme {
-//     type: ThemeType.TRIADIC;
-// }
-
-// export interface SquareComplementaryTheme extends Theme {
-//     type: ThemeType.SQUARE;
-// }
-
-// export interface RectangularComplementaryTheme extends Theme {
-//     type: ThemeType.RECTANGLE;
-// }
 
 /***********===========+++++++++++++++---------------*************================++++++++++++++++---------------*******
  * ====================================================================================================================*
@@ -436,31 +406,3 @@ export interface Theme {
     palette: AccessibleColorPair[];
     vibe: Vibe;
 }
-
-// export interface MonochromaticTheme extends Theme {
-//     type: ThemeType.MONOCHROMATIC;
-// }
-
-// export interface AnalogousTheme extends Theme {
-//     type: ThemeType.ANALOGOUS;
-// }
-
-// export interface ComplementaryTheme extends Theme {
-//     type: ThemeType.COMPLEMTENTARY;
-// }
-
-// export interface SplitComplementaryTheme extends Theme {
-//     type: ThemeType.SPLIT_COMPLEMENTARY;
-// }
-
-// export interface TriadicComplementaryTheme extends Theme {
-//     type: ThemeType.TRIADIC;
-// }
-
-// export interface SquareComplementaryTheme extends Theme {
-//     type: ThemeType.SQUARE;
-// }
-
-// export interface RectangularComplementaryTheme extends Theme {
-//     type: ThemeType.RECTANGLE;
-// }

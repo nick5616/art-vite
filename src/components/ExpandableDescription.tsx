@@ -7,15 +7,10 @@ export function ExpandableDescription(props: {
     selected: boolean;
     expandRequested: (expanded: boolean) => void;
 }) {
-    // const collapseThreshold = 50;
     const [expanded, setExpanded] = React.useState(true);
-    // const minifiedDescription = props.description.slice(0, collapseThreshold);
     const { width } = useWindowDimensions();
-    if (!props.selected) {
-        // minifiedDescription += "...";
-    }
+
     if (expanded) {
-        // console.log("MIN", minifiedDescription);
         setExpanded(false);
     }
     const descriptionRef = React.createRef<HTMLDivElement>();

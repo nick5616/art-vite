@@ -38,7 +38,6 @@ export function ArtInfoCardExpanded(props: {
                 margin: "auto",
                 borderRadius: "10px",
                 width: "100%",
-                // display: "flex",
             }}
             onClick={() => {
                 props.onCardClicked(props.index);
@@ -46,21 +45,17 @@ export function ArtInfoCardExpanded(props: {
         >
             <div
                 style={{
-                    // display: "flex",
                     alignItems: "center",
                 }}
             ></div>
             <div
                 style={{
-                    // display: "flex",
                     whiteSpace: "nowrap",
                 }}
             >
                 <h1
                     style={{
                         fontSize: "20pt",
-                        // display: "flex",
-                        // borderRight: "1px solid" + color,
                         marginLeft: 0,
                         marginBottom: "10px",
                         textAlign: "start",
@@ -69,19 +64,11 @@ export function ArtInfoCardExpanded(props: {
                     {props.title}
                 </h1>
             </div>
-            <div
-                style={
-                    {
-                        // display: "flex",
-                        // paddingLeft: "10px",
-                    }
-                }
-            >
+            <div>
                 <div>
                     <div
                         style={{
                             alignItems: "center",
-                            // background: "red",
                             textAlign: "start",
                         }}
                     >

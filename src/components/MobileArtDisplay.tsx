@@ -24,8 +24,6 @@ export function MobileArtDisplay(props: {
         x: number;
         y: number;
     } | null>(null);
-    // const createdOnString = props.entries[selectedIndex].date;
-    // the required distance between touchStart and touchEnd to be detected as a swipe
     const minSwipeDistance = 50;
 
     const onTouchStart = (e: any) => {
@@ -51,9 +49,7 @@ export function MobileArtDisplay(props: {
 
         const isLeftSwipe = distanceX > minSwipeDistance && isHorizontalSwipe;
         const isRightSwipe = distanceX < -minSwipeDistance && isHorizontalSwipe;
-        if (isLeftSwipe || isRightSwipe)
-            console.log("swipe", isLeftSwipe ? "left" : "right");
-        // add your conditional logic here
+
         const old = props.selectedIndex;
         if (isRightSwipe) {
             const rightIndex = old === 0 ? props.entries.length - 1 : old - 1;
@@ -70,7 +66,6 @@ export function MobileArtDisplay(props: {
     return (
         <div
             style={{
-                // border: "2px dashed black",
                 height: `${height}px`,
                 width: `${width}px`,
                 position: "relative",
@@ -179,7 +174,6 @@ export function MobileArtDisplay(props: {
                     margin: "auto",
                     position: "absolute",
                     bottom: 0,
-                    // border: "2px dashed white",
                 }}
             >
                 <div

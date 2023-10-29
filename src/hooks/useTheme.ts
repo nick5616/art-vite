@@ -5,7 +5,3 @@ export function reducer(state: Theme, action: ThemeAction) {
     console.log("action", action);
     return getThemeFromVibe(action.newVibe);
 }
-
-// export function useTheme() {
-
-// }
