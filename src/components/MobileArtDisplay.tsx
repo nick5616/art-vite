@@ -24,7 +24,6 @@ export function MobileArtDisplay(props: {
         x: number;
         y: number;
     } | null>(null);
-    console.log("touches", touchStart, touchEnd);
     // const createdOnString = props.entries[selectedIndex].date;
     // the required distance between touchStart and touchEnd to be detected as a swipe
     const minSwipeDistance = 50;
@@ -67,7 +66,6 @@ export function MobileArtDisplay(props: {
     };
     const descriptionMaxCharacterLimit = 34;
     const { width, height } = useWindowDimensions();
-    console.log("width height", width, height);
     const [descriptionExpanded, setDescriptionExpanded] = React.useState(false);
     return (
         <div
@@ -145,6 +143,9 @@ export function MobileArtDisplay(props: {
                         height: "100%",
                         fontSize: "20pt",
                     }}
+                    onTouchStart={onTouchStart}
+                    onTouchEnd={onTouchEnd}
+                    onTouchMove={onTouchMove}
                 >
                     🚧 UNDER CONSTRUCTION 🚧
                 </h1>
