@@ -20,7 +20,7 @@ export function ExpandableDescription(props: {
     if (descriptionOverflowed) {
         props.descriptionOverflowed();
     }
-    return expanded ? (
+    return props.selected || expanded ? (
         <div
             style={{
                 textAlign: "start",

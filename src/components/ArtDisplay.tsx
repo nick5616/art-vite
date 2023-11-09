@@ -135,7 +135,7 @@ export function ArtDisplay(props: {
                             ) : (
                                 <img
                                     style={{
-                                        maxWidth: width - 500,
+                                        maxWidth: width / 2 - 20,
                                         maxHeight: height - 70,
                                     }}
                                     src={`${imagePathArray[selectedIndex]}`}

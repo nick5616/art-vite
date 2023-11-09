@@ -67,16 +67,16 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             hidden: false,
         },
 
-        {
-            title: "Daytime",
-            description:
-                "I was walking around and saw a massive tree. I liked the way the leaves shimmered as the wind moved past.",
-            mediaName: "Untitled-Artwork.jpg",
-            vibe: Vibe.BABY_BLUE,
-            date: "09/24/23",
-            index: 6,
-            hidden: true,
-        },
+        // {
+        //     title: "Daytime",
+        //     description:
+        //         "I was walking around and saw a massive tree. I liked the way the leaves shimmered as the wind moved past.",
+        //     mediaName: "Untitled-Artwork.jpg",
+        //     vibe: Vibe.BABY_BLUE,
+        //     date: "09/24/23",
+        //     index: 6,
+        //     hidden: true,
+        // },
         {
             title: "Sleepytime Tree",
             description:

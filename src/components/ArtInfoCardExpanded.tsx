@@ -76,17 +76,6 @@ export function ArtInfoCardExpanded(props: {
                     <div style={{ float: "right" }}>
                         {props.date ? <p>Created on {props.date}</p> : <></>}
                     </div>
-                    {/* <div
-                        style={{
-                            textAlign: "start",
-                            marginTop: "5px",
-                        }}
-                        onClick={() => {
-                            props.onCollapseToggled();
-                        }}
-                    >
-                        <strong>hide</strong>
-                    </div> */}
                 </div>
             </div>
         </div>

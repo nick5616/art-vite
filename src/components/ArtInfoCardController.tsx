@@ -57,9 +57,6 @@ export function ArtInfoCardController(props: {
                     setDescriptionExpanded(true);
                 }
                 props.onCardClicked(props.index);
-                // setDescriptionExpanded(
-                //     (descriptionExpanded) => !descriptionExpanded,
-                // );
             }}
         >
             {!(descriptionExpanded && props.selected) ? (

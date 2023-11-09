@@ -22,19 +22,13 @@ export function ArtInfoCard(props: {
             }}
             onClick={() => props.onInfoCardClicked}
         >
-            <div
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    paddingRight: "10px",
-                }}
-            ></div>
             <ArtTitle title={props.title}></ArtTitle>
             <div
                 style={{
                     display: "flex",
                     alignItems: "center",
                     width: "100%",
+                    gap: "10px",
                 }}
             >
                 <div>
