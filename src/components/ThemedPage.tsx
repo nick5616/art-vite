@@ -4,7 +4,7 @@ import { Theme, Vibe } from "../models";
 import { ArtEntry } from "../models";
 import { getThemeFromVibe } from "../theme";
 import { ArtDisplay } from "./ArtDisplay";
-import { Introduction } from "./Introduction";
+import { AboveFold } from "./AboveFold";
 
 function fetchEntriesFromJSONMock(): ArtEntry[] {
     const data = [
@@ -105,10 +105,10 @@ export function ThemedPage(props: {
 
     return (
         <div>
-            <Introduction
+            <AboveFold
                 pageTheme={pageTheme}
                 chosenPaletteIndex={chosenPaletteIndex}
-            ></Introduction>
+            ></AboveFold>
             <ArtDisplay
                 entries={entries}
                 onArtChanged={(vibe, paletteIndex) => {
