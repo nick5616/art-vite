@@ -84,7 +84,7 @@ function fetchEntriesFromJSONMock(): ArtEntry[] {
             mediaName: "Untitled-Artwork.jpg",
             vibe: Vibe.LIMELIGHT,
             date: "09/24/23",
-            index: 7,
+            index: 6,
             hidden: false,
         },
     ];
