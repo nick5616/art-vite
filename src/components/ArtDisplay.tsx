@@ -14,6 +14,7 @@ import imgUrl8 from "../../art/Untitled-Artwork.jpg";
 import { useMediaQuery } from "@react-hook/media-query";
 import { MobileArtDisplay } from "./MobileArtDisplay";
 import useWindowDimensions from "../hooks/useWindowDimenstions";
+
 export function ArtDisplay(props: {
     entries: ArtEntry[];
     onArtChanged: (vibe: Vibe, paletteIndex: number) => void;

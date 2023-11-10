@@ -59,7 +59,7 @@ export function ArtInfoCardController(props: {
                 props.onCardClicked(props.index);
             }}
         >
-            {!(descriptionExpanded && props.selected) ? (
+            {!props.selected ? (
                 <ArtInfoCard
                     title={props.title}
                     onCollapseToggled={() => {
