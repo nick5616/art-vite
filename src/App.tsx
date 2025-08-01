@@ -23,7 +23,7 @@ function App() {
                 color: pair.colorPair.color,
                 display: "flex",
                 alignItems: "center",
-                maxWidth: "100%",
+                width: "100vw",
             }}
         >
             <ThemedPage

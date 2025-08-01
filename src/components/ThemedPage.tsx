@@ -5,6 +5,7 @@ import { ArtEntry } from "../models";
 import { getThemeFromVibe } from "../theme";
 import { ArtDisplay } from "./ArtDisplay";
 import { AboveFold } from "./AboveFold";
+import { PortfolioSection } from "./PortfolioSection";
 
 function fetchEntriesFromJSONMock(): ArtEntry[] {
     const data = [
@@ -104,7 +105,7 @@ export function ThemedPage(props: {
     }, [pageVibe, setPageVibe]);
 
     return (
-        <div>
+        <div style={{ width: "100vw", height: "100%" }}>
             <AboveFold
                 pageTheme={pageTheme}
                 chosenPaletteIndex={chosenPaletteIndex}
@@ -115,7 +116,15 @@ export function ThemedPage(props: {
                     setPageVibe(vibe);
                     setChosenPaletteIndex(paletteIndex);
                 }}
-            ></ArtDisplay>
+            />
+            <div
+                style={{
+                    width: "100vw",
+                    height: "100%",
+                }}
+            >
+                <PortfolioSection pageTheme={pageTheme} />
+            </div>
         </div>
     );
 }
