@@ -115,7 +115,7 @@ export function PortfolioSection({
                     }}
                 >
                     <a
-                        href="https://www.3d.saucedog.art"
+                        href="https://nicolasbelovoskey.com"
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
