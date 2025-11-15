@@ -32,6 +32,9 @@ function PageShell({
             <Link className="navitem" href="/art">
               Art portfolio
             </Link>
+            <Link className="navitem" href="/piano">
+              Piano
+            </Link>
           </Sidebar>
           <Content>{children}</Content>
         </Layout>

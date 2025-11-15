@@ -26,6 +26,10 @@ async function startServer() {
   }
 
   app.get('*', async (req, res, next) => {
+    // Skip root route - let it use the original Vite app
+    if (req.originalUrl === '/' || req.originalUrl === '') {
+      return next()
+    }
     const pageContextInit = {
       urlOriginal: req.originalUrl
     }

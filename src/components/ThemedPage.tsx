@@ -6,6 +6,7 @@ import { getThemeFromVibe } from "../theme";
 import { ArtDisplay } from "./ArtDisplay";
 import { AboveFold } from "./AboveFold";
 import { PortfolioSection } from "./PortfolioSection";
+import { PianoSection } from "./PianoSection";
 
 function fetchEntriesFromJSONMock(): ArtEntry[] {
     const data = [
@@ -117,6 +118,14 @@ export function ThemedPage(props: {
                     setChosenPaletteIndex(paletteIndex);
                 }}
             />
+            <div
+                style={{
+                    width: "100vw",
+                    height: "100%",
+                }}
+            >
+                <PianoSection pageTheme={pageTheme} />
+            </div>
             <div
                 style={{
                     width: "100vw",
