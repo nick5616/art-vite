@@ -17,6 +17,30 @@ const PianoKeyboard = () => {
         const ctx = new (window.AudioContext ||
             (window as any).webkitAudioContext)();
         setAudioContext(ctx);
+
+        // On mobile, AudioContext starts suspended - we'll resume on first user interaction
+        if (ctx.state === "suspended") {
+            const enableAudio = async () => {
+                try {
+                    await ctx.resume();
+                } catch (error) {
+                    console.error("Failed to enable audio:", error);
+                }
+            };
+
+            // Try to enable on first touch/click
+            const handleFirstInteraction = () => {
+                enableAudio();
+            };
+
+            document.addEventListener("touchstart", handleFirstInteraction, {
+                once: true,
+            });
+            document.addEventListener("click", handleFirstInteraction, {
+                once: true,
+            });
+        }
+
         return () => {
             ctx.close();
         };
@@ -35,12 +59,24 @@ const PianoKeyboard = () => {
         return () => window.removeEventListener("resize", updateOctaves);
     }, []);
 
-    const playNote = (
+    const resumeAudioContext = async () => {
+        if (!audioContext) return;
+        if (audioContext.state === "suspended") {
+            try {
+                await audioContext.resume();
+            } catch (error) {
+                console.error("Failed to resume audio context:", error);
+            }
+        }
+    };
+
+    const playNote = async (
         frequency: number,
         noteName: string,
         noteOctave: number,
     ) => {
         if (!audioContext) return;
+        await resumeAudioContext();
 
         const osc = audioContext.createOscillator();
         const gain = audioContext.createGain();
@@ -61,8 +97,9 @@ const PianoKeyboard = () => {
         setNoteHistory((prev) => [...prev.slice(-7), noteWithOctave]);
     };
 
-    const playChord = (frequencies: number[], chordName: string) => {
+    const playChord = async (frequencies: number[], chordName: string) => {
         if (!audioContext) return;
+        await resumeAudioContext();
 
         frequencies.forEach((freq: number) => {
             const osc = audioContext.createOscillator();
