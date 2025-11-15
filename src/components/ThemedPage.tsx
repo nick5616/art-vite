@@ -118,14 +118,7 @@ export function ThemedPage(props: {
                     setChosenPaletteIndex(paletteIndex);
                 }}
             />
-            <div
-                style={{
-                    width: "100vw",
-                    height: "100%",
-                }}
-            >
-                <PianoSection />
-            </div>
+
             <div
                 style={{
                     width: "100vw",
@@ -133,6 +126,14 @@ export function ThemedPage(props: {
                 }}
             >
                 <PortfolioSection pageTheme={pageTheme} />
+            </div>
+            <div
+                style={{
+                    width: "100vw",
+                    height: "100%",
+                }}
+            >
+                <PianoSection />
             </div>
         </div>
     );
