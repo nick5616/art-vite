@@ -124,7 +124,7 @@ export function ThemedPage(props: {
                     height: "100%",
                 }}
             >
-                <PianoSection pageTheme={pageTheme} />
+                <PianoSection />
             </div>
             <div
                 style={{

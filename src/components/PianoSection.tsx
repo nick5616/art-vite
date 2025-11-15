@@ -1,14 +1,6 @@
 import * as React from "react";
-import { Theme } from "../models";
-import { getRandomBackgroundColorPairFromPalette } from "../theme";
 
-interface PianoSectionProps {
-    pageTheme: Theme;
-}
-
-export function PianoSection({ pageTheme }: PianoSectionProps): JSX.Element {
-    const pair = getRandomBackgroundColorPairFromPalette(pageTheme.palette);
-
+export function PianoSection(): JSX.Element {
     return (
         <div
             style={{
