@@ -1,173 +1,238 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Music } from "lucide-react";
+
+import {
+    ChevronLeft,
+    ChevronRight,
+    Music,
+    TrendingUp,
+    TrendingDown,
+    Minus,
+    Zap,
+} from "lucide-react";
+
+type Note = {
+    note: string;
+    altName: string;
+    freq: number;
+    isBlack: boolean;
+    semitone: number;
+};
+
+type RecentNote = {
+    name: string;
+    octave: number;
+    semitone: number;
+};
+
+type Toast = {
+    name: string;
+    emoji: string;
+    color: string;
+};
+
+type KeyType = "C" | "G" | "D" | "F" | "Am" | "Em";
 
 const PianoKeyboard = () => {
     const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
     const [octave, setOctave] = useState(4);
-    const [selectedKey, setSelectedKey] = useState<
-        "C" | "G" | "D" | "F" | "Am" | "Em"
-    >("C");
-    const [showInScale, setShowInScale] = useState(true);
-    const [lastPlayedNotes, setLastPlayedNotes] = useState<string[]>([]);
+    const [selectedKey, setSelectedKey] = useState<KeyType>("C");
+    const [showSmart, setShowSmart] = useState(true);
+    const [recentNotes, setRecentNotes] = useState<RecentNote[]>([]);
     const [noteHistory, setNoteHistory] = useState<string[]>([]);
     const [numOctaves, setNumOctaves] = useState(2);
+    const [toast, setToast] = useState<Toast | null>(null);
 
     useEffect(() => {
         const ctx = new (window.AudioContext ||
             (window as any).webkitAudioContext)();
+
+        const unlock = () => {
+            if (ctx.state === "suspended") ctx.resume();
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            g.gain.value = 0;
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.start(0);
+            o.stop(0.001);
+        };
+
+        document.addEventListener("touchstart", unlock, { once: true });
+        document.addEventListener("click", unlock, { once: true });
+
         setAudioContext(ctx);
-
-        // On mobile, AudioContext starts suspended - we'll resume on first user interaction
-        if (ctx.state === "suspended") {
-            const enableAudio = async () => {
-                try {
-                    await ctx.resume();
-                } catch (error) {
-                    console.error("Failed to enable audio:", error);
-                }
-            };
-
-            // Try to enable on first touch/click
-            const handleFirstInteraction = () => {
-                enableAudio();
-            };
-
-            document.addEventListener("touchstart", handleFirstInteraction, {
-                once: true,
-            });
-            document.addEventListener("click", handleFirstInteraction, {
-                once: true,
-            });
-        }
-
         return () => {
             ctx.close();
         };
     }, []);
 
     useEffect(() => {
-        const updateOctaves = () => {
-            const width = window.innerWidth;
-            if (width >= 1400) setNumOctaves(3);
-            else if (width >= 900) setNumOctaves(2);
+        const update = () => {
+            const w = window.innerWidth;
+            if (w >= 1400) setNumOctaves(3);
+            else if (w >= 900) setNumOctaves(2);
             else setNumOctaves(1);
         };
 
-        updateOctaves();
-        window.addEventListener("resize", updateOctaves);
-        return () => window.removeEventListener("resize", updateOctaves);
+        update();
+        window.addEventListener("resize", update);
+        return () => window.removeEventListener("resize", update);
     }, []);
 
-    const resumeAudioContext = async () => {
+    const playNote = (freq: number, name: string, oct: number) => {
         if (!audioContext) return;
-        if (audioContext.state === "suspended") {
-            try {
-                await audioContext.resume();
-            } catch (error) {
-                console.error("Failed to resume audio context:", error);
-            }
-        }
-    };
-
-    const playNote = async (
-        frequency: number,
-        noteName: string,
-        noteOctave: number,
-    ) => {
-        if (!audioContext) return;
-        await resumeAudioContext();
-
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
-        osc.frequency.value = frequency;
-        osc.type = "sine";
-        gain.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(
+        const o = audioContext.createOscillator();
+        const g = audioContext.createGain();
+        o.connect(g);
+        g.connect(audioContext.destination);
+        o.frequency.value = freq;
+        o.type = "sine";
+        g.gain.setValueAtTime(0.3, audioContext.currentTime);
+        g.gain.exponentialRampToValueAtTime(
             0.01,
             audioContext.currentTime + 0.5,
         );
-        osc.start(audioContext.currentTime);
-        osc.stop(audioContext.currentTime + 0.5);
+        o.start();
+        o.stop(audioContext.currentTime + 0.5);
 
-        const noteWithOctave = `${noteName}-${noteOctave}`;
-        setLastPlayedNotes([noteWithOctave]);
-        setNoteHistory((prev) => [...prev.slice(-7), noteWithOctave]);
+        const noteData = baseFreqs.find((n) => n.note === name);
+        if (!noteData) return;
+        const semi = noteData.semitone;
+        const newNote: RecentNote = { name, octave: oct, semitone: semi };
+
+        // Show toast for interval
+        if (recentNotes.length > 0) {
+            const lastNote = recentNotes[recentNotes.length - 1];
+            const interval = (semi - lastNote.semitone + 12) % 12;
+
+            const intervalNames: Record<number, Toast> = {
+                0: { name: "Unison", emoji: "🎯", color: "blue" },
+                1: { name: "Minor 2nd", emoji: "😬", color: "red" },
+                2: { name: "Major 2nd", emoji: "👍", color: "green" },
+                3: { name: "Minor 3rd", emoji: "😊", color: "green" },
+                4: { name: "Major 3rd", emoji: "✨", color: "green" },
+                5: { name: "Perfect 4th", emoji: "🎵", color: "blue" },
+                6: { name: "Tritone", emoji: "🔥", color: "orange" },
+                7: { name: "Perfect 5th", emoji: "⭐", color: "purple" },
+                8: { name: "Minor 6th", emoji: "💫", color: "green" },
+                9: { name: "Major 6th", emoji: "🌟", color: "green" },
+                10: { name: "Minor 7th", emoji: "🎶", color: "blue" },
+                11: { name: "Major 7th", emoji: "✨", color: "blue" },
+            };
+
+            const intervalInfo = intervalNames[interval];
+            if (intervalInfo) {
+                setToast(intervalInfo);
+                setTimeout(() => setToast(null), 1500);
+            }
+        }
+
+        setRecentNotes((p) => [...p.slice(-7), newNote]);
+        setNoteHistory((p) => [...p.slice(-7), `${name}-${oct}`]);
     };
 
-    const playChord = async (frequencies: number[], chordName: string) => {
+    const playChord = (freqs: number[], name: string) => {
         if (!audioContext) return;
-        await resumeAudioContext();
-
-        frequencies.forEach((freq: number) => {
-            const osc = audioContext.createOscillator();
-            const gain = audioContext.createGain();
-            osc.connect(gain);
-            gain.connect(audioContext.destination);
-            osc.frequency.value = freq;
-            osc.type = "sine";
-            gain.gain.setValueAtTime(0.15, audioContext.currentTime);
-            gain.gain.exponentialRampToValueAtTime(
+        freqs.forEach((freq) => {
+            const o = audioContext.createOscillator();
+            const g = audioContext.createGain();
+            o.connect(g);
+            g.connect(audioContext.destination);
+            o.frequency.value = freq;
+            o.type = "sine";
+            g.gain.setValueAtTime(0.15, audioContext.currentTime);
+            g.gain.exponentialRampToValueAtTime(
                 0.01,
                 audioContext.currentTime + 1,
             );
-            osc.start(audioContext.currentTime);
-            osc.stop(audioContext.currentTime + 1);
+            o.start();
+            o.stop(audioContext.currentTime + 1);
         });
 
-        const chordData = keyData[selectedKey].chords.find(
-            (c: any) => c.name === chordName,
-        );
-        if (chordData) {
-            const chordNotes = getChordNotes(chordData.root, chordData.type);
-            const notesWithOctave = chordNotes.map(
-                (note) => `${note}-${octave}`,
-            );
-            setLastPlayedNotes(notesWithOctave);
-            setNoteHistory((prev) =>
-                [...prev.slice(-7), ...notesWithOctave].slice(-8),
+        const chord = keyData[selectedKey].chords.find((c) => c.name === name);
+        if (chord) {
+            const notes = getChordNotes(chord.root, chord.type);
+            const data = notes.map((n) => {
+                const noteData = baseFreqs.find((bf) => bf.note === n);
+                return {
+                    name: n,
+                    octave: octave,
+                    semitone: noteData?.semitone || 0,
+                };
+            });
+            setRecentNotes((p) => [...p.slice(-7), ...data].slice(-8));
+            setNoteHistory((p) =>
+                [...p.slice(-7), ...notes.map((n) => `${n}-${octave}`)].slice(
+                    -8,
+                ),
             );
         }
     };
 
     const getChordNotes = (root: string, type: string) => {
-        const rootNote = baseFreqs.find((n) => n.note === root);
-        if (!rootNote) return [];
-
+        const r = baseFreqs.find((n) => n.note === root);
+        if (!r) return [];
         const notes = [root];
         const third = type === "major" ? 4 : 3;
         const fifth = type === "diminished" ? 6 : 7;
-
-        const thirdNote = baseFreqs.find(
-            (n) => n.semitone === (rootNote.semitone + third) % 12,
+        const t = baseFreqs.find(
+            (n) => n.semitone === (r.semitone + third) % 12,
         );
-        const fifthNote = baseFreqs.find(
-            (n) => n.semitone === (rootNote.semitone + fifth) % 12,
+        const f = baseFreqs.find(
+            (n) => n.semitone === (r.semitone + fifth) % 12,
         );
-
-        if (thirdNote) notes.push(thirdNote.note);
-        if (fifthNote) notes.push(fifthNote.note);
+        if (t) notes.push(t.note);
+        if (f) notes.push(f.note);
         return notes;
     };
 
     const baseFreqs = [
-        { note: "C", freq: 261.63, isBlack: false, semitone: 0 },
-        { note: "C#", freq: 277.18, isBlack: true, semitone: 1 },
-        { note: "D", freq: 293.66, isBlack: false, semitone: 2 },
-        { note: "D#", freq: 311.13, isBlack: true, semitone: 3 },
-        { note: "E", freq: 329.63, isBlack: false, semitone: 4 },
-        { note: "F", freq: 349.23, isBlack: false, semitone: 5 },
-        { note: "F#", freq: 369.99, isBlack: true, semitone: 6 },
-        { note: "G", freq: 392.0, isBlack: false, semitone: 7 },
-        { note: "G#", freq: 415.3, isBlack: true, semitone: 8 },
-        { note: "A", freq: 440.0, isBlack: false, semitone: 9 },
-        { note: "A#", freq: 466.16, isBlack: true, semitone: 10 },
-        { note: "B", freq: 493.88, isBlack: false, semitone: 11 },
+        { note: "C", altName: "C", freq: 261.63, isBlack: false, semitone: 0 },
+        { note: "C#", altName: "Db", freq: 277.18, isBlack: true, semitone: 1 },
+        { note: "D", altName: "D", freq: 293.66, isBlack: false, semitone: 2 },
+        { note: "D#", altName: "Eb", freq: 311.13, isBlack: true, semitone: 3 },
+        { note: "E", altName: "E", freq: 329.63, isBlack: false, semitone: 4 },
+        { note: "F", altName: "F", freq: 349.23, isBlack: false, semitone: 5 },
+        { note: "F#", altName: "Gb", freq: 369.99, isBlack: true, semitone: 6 },
+        { note: "G", altName: "G", freq: 392.0, isBlack: false, semitone: 7 },
+        { note: "G#", altName: "Ab", freq: 415.3, isBlack: true, semitone: 8 },
+        { note: "A", altName: "A", freq: 440.0, isBlack: false, semitone: 9 },
+        {
+            note: "A#",
+            altName: "Bb",
+            freq: 466.16,
+            isBlack: true,
+            semitone: 10,
+        },
+        { note: "B", altName: "B", freq: 493.88, isBlack: false, semitone: 11 },
     ];
 
-    const keyData = {
+    const keyNoteNames: Record<KeyType, Record<number, string>> = {
+        C: { 1: "C#", 3: "D#", 6: "F#", 8: "G#", 10: "A#" },
+        G: { 1: "C#", 3: "D#", 6: "F#", 8: "G#", 10: "A#" },
+        D: { 1: "C#", 3: "D#", 6: "F#", 8: "G#", 10: "A#" },
+        F: { 1: "Db", 3: "Eb", 6: "Gb", 8: "Ab", 10: "Bb" },
+        Am: { 1: "C#", 3: "Eb", 6: "F#", 8: "G#", 10: "Bb" },
+        Em: { 1: "C#", 3: "D#", 6: "F#", 8: "G#", 10: "Bb" },
+    };
+
+    const getNoteName = (semitone: number) => {
+        const note = baseFreqs.find((n) => n.semitone === semitone);
+        if (!note || !note.isBlack) return note?.note;
+        return keyNoteNames[selectedKey]?.[semitone] || note.note;
+    };
+
+    type Chord = {
+        name: string;
+        root: string;
+        type: string;
+        degree: string;
+        transitions: string[];
+        strength: Record<string, number>;
+    };
+
+    const keyData: Record<KeyType, { scale: number[]; chords: Chord[] }> = {
         C: {
             scale: [0, 2, 4, 5, 7, 9, 11],
             chords: [
@@ -472,96 +537,129 @@ const PianoKeyboard = () => {
         },
     };
 
-    const getFreq = (baseFreq: number, baseOct: number, targetOct: number) => {
-        return baseFreq * Math.pow(2, targetOct - baseOct);
-    };
+    const getFreq = (base: number, baseOct: number, targetOct: number) =>
+        base * Math.pow(2, targetOct - baseOct);
 
-    const isInKey = (semitone: number) => {
-        return keyData[selectedKey].scale.includes(semitone % 12);
-    };
+    const isInKey = (semi: number) =>
+        keyData[selectedKey].scale.includes(semi % 12);
 
-    const getNoteStrengths = (): Record<string, number> => {
-        if (lastPlayedNotes.length === 0) return {};
+    const analyzeNote = (
+        targetSemi: number,
+    ): {
+        dissonance: number;
+        momentum: "neutral" | "ascending" | "descending" | "static";
+        tension: number;
+        consonance: number;
+        continues: boolean;
+        resolves: boolean;
+        inKey: boolean;
+    } => {
+        if (recentNotes.length === 0)
+            return {
+                dissonance: 0,
+                momentum: "neutral" as const,
+                tension: 0,
+                consonance: 0,
+                continues: false,
+                resolves: false,
+                inKey: isInKey(targetSemi),
+            };
 
-        const rootNote = lastPlayedNotes[0].split("-")[0];
-        const lastNote = baseFreqs.find((n) => n.note === rootNote);
-        if (!lastNote) return {};
+        let maxDiss = 0;
+        let totalTension = 0;
 
-        const strengths: Record<string, number> = {};
+        recentNotes.forEach((rn, i) => {
+            const weight = (i + 1) / recentNotes.length;
+            const interval = Math.abs((targetSemi - rn.semitone + 12) % 12);
+            const minInt = Math.min(interval, 12 - interval);
 
-        baseFreqs.forEach((note) => {
-            const interval = (note.semitone - lastNote.semitone + 12) % 12;
-            if (isInKey(note.semitone)) {
-                if ([7, 12].includes(interval)) strengths[note.note] = 3;
-                else if ([3, 4, 5, 8, 9].includes(interval))
-                    strengths[note.note] = 2;
-                else strengths[note.note] = 1;
-            }
+            let diss = 0;
+            if (minInt === 1 || minInt === 6) diss = 3;
+            else if (minInt === 2 || minInt === 5) diss = 2;
+            else if (minInt === 10 || minInt === 11) diss = 1;
+
+            maxDiss = Math.max(maxDiss, diss * weight);
+            if (minInt === 1) totalTension += weight * 2;
+            else if (minInt === 2) totalTension += weight;
         });
 
-        return strengths;
+        let momentum: "neutral" | "ascending" | "descending" | "static" =
+            "neutral";
+        if (recentNotes.length >= 3) {
+            const last3 = recentNotes.slice(-3);
+            const diffs = last3
+                .slice(1)
+                .map((n, i) => n.semitone - last3[i].semitone);
+            if (diffs.every((d) => d > 0)) momentum = "ascending";
+            else if (diffs.every((d) => d < 0)) momentum = "descending";
+            else if (Math.abs(diffs[0]) <= 2 && Math.abs(diffs[1]) <= 2)
+                momentum = "static";
+        }
+
+        const lastNote = recentNotes[recentNotes.length - 1];
+        const intervalFromLast = targetSemi - lastNote.semitone;
+
+        let continues = false;
+        let resolves = false;
+
+        if (momentum === "ascending" && intervalFromLast > 0) continues = true;
+        else if (momentum === "descending" && intervalFromLast < 0)
+            continues = true;
+        else if (momentum === "static" && Math.abs(intervalFromLast) <= 2)
+            continues = true;
+
+        if (
+            Math.abs(intervalFromLast) <= 2 &&
+            [0, 4, 7].includes(targetSemi % 12)
+        )
+            resolves = true;
+        if (momentum === "ascending" && intervalFromLast < 0) resolves = true;
+        if (momentum === "descending" && intervalFromLast > 0) resolves = true;
+
+        let consonance = 0;
+        const minInt = Math.abs((targetSemi - lastNote.semitone + 12) % 12);
+        if ([0, 7, 12].includes(minInt)) consonance = 3;
+        else if ([3, 4, 8, 9].includes(minInt)) consonance = 2;
+        else if ([5, 10].includes(minInt)) consonance = 1;
+
+        return {
+            dissonance: maxDiss,
+            momentum,
+            continues,
+            resolves,
+            tension: totalTension,
+            consonance,
+            inKey: isInKey(targetSemi),
+        };
     };
 
-    const getChordStrength = (chordName: string) => {
-        if (lastPlayedNotes.length === 0) return 1;
-
-        const rootNote = lastPlayedNotes[0].split("-")[0];
-        const currentChord = keyData[selectedKey].chords.find((chord: any) => {
-            const chordRoot = baseFreqs.find((n) => n.note === chord.root);
-            const lastNote = baseFreqs.find((n) => n.note === rootNote);
-            if (!chordRoot || !lastNote) return false;
-
-            const interval = (lastNote.semitone - chordRoot.semitone + 12) % 12;
-            if (chord.type === "major") return [0, 4, 7].includes(interval);
-            if (chord.type === "minor") return [0, 3, 7].includes(interval);
-            return [0, 3, 6].includes(interval);
-        });
-
-        return (currentChord?.strength as any)?.[chordName] || 1;
+    type NoteWithAnalysis = Note & {
+        displayName: string;
+        freq: number;
+        octave: number;
+        id: string;
+        dissonance: number;
+        momentum: "neutral" | "ascending" | "descending" | "static";
+        tension: number;
+        consonance: number;
+        continues: boolean;
+        resolves: boolean;
+        inKey: boolean;
     };
 
-    const getSuggestedChords = () => {
-        const allChords = keyData[selectedKey].chords;
-        if (lastPlayedNotes.length === 0) return allChords;
-
-        const rootNote = lastPlayedNotes[0].split("-")[0];
-        const currentChord = allChords.find((chord: any) => {
-            const chordRoot = baseFreqs.find((n) => n.note === chord.root);
-            const lastNote = baseFreqs.find((n) => n.note === rootNote);
-            if (!chordRoot || !lastNote) return false;
-
-            const interval = (lastNote.semitone - chordRoot.semitone + 12) % 12;
-            if (chord.type === "major") return [0, 4, 7].includes(interval);
-            if (chord.type === "minor") return [0, 3, 7].includes(interval);
-            return [0, 3, 6].includes(interval);
-        });
-
-        if (!currentChord) return allChords;
-
-        const suggested = allChords.filter(
-            (c: any) =>
-                currentChord.transitions?.includes(c.name) &&
-                c.name !== currentChord.name,
-        );
-
-        return suggested.length > 0
-            ? suggested
-            : allChords.filter((c: any) => c.name !== currentChord.name);
-    };
-
-    const noteStrengths = getNoteStrengths();
-
-    const allNotes: any[] = [];
+    const allNotes: NoteWithAnalysis[] = [];
     for (let oct = octave; oct < octave + numOctaves; oct++) {
         baseFreqs.forEach((n) => {
             if (n.semitone < 12) {
+                const analysis = analyzeNote(n.semitone);
+                const displayName = getNoteName(n.semitone);
                 allNotes.push({
                     ...n,
+                    displayName: displayName || n.note,
                     freq: getFreq(n.freq, 4, oct),
-                    inScale: isInKey(n.semitone),
-                    strength: noteStrengths[n.note] || 0,
                     octave: oct,
                     id: `${n.note}-${oct}`,
+                    ...analysis,
                 });
             }
         });
@@ -570,36 +668,79 @@ const PianoKeyboard = () => {
     const whiteKeys = allNotes.filter((n) => !n.isBlack);
     const blackKeys = allNotes.filter((n) => n.isBlack);
 
-    const getKeyStyle = (note: any) => {
-        if (lastPlayedNotes.includes(note.id)) {
+    const getKeyStyle = (note: NoteWithAnalysis) => {
+        const justPlayed =
+            recentNotes.length > 0 &&
+            recentNotes[recentNotes.length - 1].name === note.note &&
+            recentNotes[recentNotes.length - 1].octave === note.octave;
+
+        if (justPlayed)
             return "bg-yellow-300 text-yellow-900 border-yellow-500";
+
+        // No smart mode or no context - show in-scale vs out-of-scale
+        if (!showSmart || recentNotes.length === 0) {
+            if (note.inKey) return "bg-blue-200 text-blue-900 border-blue-400";
+            return note.isBlack
+                ? "bg-gray-700 text-white border-2 border-dashed border-gray-500"
+                : "bg-gray-200 text-gray-700 border-2 border-dashed border-gray-400";
         }
 
-        if (showInScale && lastPlayedNotes.length > 0 && note.strength > 0) {
-            if (note.strength === 3)
+        // Smart mode with context
+
+        // VERY dissonant notes - red
+        if (note.dissonance >= 2.5 && !note.resolves)
+            return "bg-red-600 text-white border-red-800";
+        if (note.dissonance >= 2.0 && !note.resolves)
+            return "bg-red-400 text-white border-red-600";
+
+        // Consonant notes IN KEY - solid green
+        if (note.inKey) {
+            if (note.consonance === 3)
                 return "bg-green-500 text-white border-green-700";
-            if (note.strength === 2)
+            if (note.consonance === 2)
                 return "bg-green-400 text-white border-green-600";
-            return "bg-green-300 text-green-900 border-green-500";
-        }
-
-        if (showInScale && note.inScale) {
+            if (note.consonance === 1)
+                return "bg-green-300 text-green-900 border-green-500";
+            // In key but not particularly consonant - blue
             return "bg-blue-200 text-blue-900 border-blue-400";
         }
 
+        // Consonant notes OUT OF KEY - green with dashed border (chromatic)
+        if (note.consonance === 3)
+            return "text-white border-2 border-dashed border-green-500";
+        if (note.consonance === 2)
+            return "text-white border-2 border-dashed border-green-400";
+        if (note.consonance === 1)
+            return "text-green-900 border-2 border-dashed border-green-300";
+
+        // Out of scale and not consonant - grey dashed
         return note.isBlack
-            ? "bg-gray-900 text-white border-black"
-            : "bg-white text-gray-600 border-gray-800";
+            ? "bg-gray-700 text-white border-2 border-dashed border-gray-500"
+            : "bg-gray-200 text-gray-700 border-2 border-dashed border-gray-400";
+    };
+
+    const getIcon = (note: NoteWithAnalysis) => {
+        if (recentNotes.length === 0) return null;
+        const cls =
+            "w-3 h-3 absolute top-1 left-1/2 transform -translate-x-1/2";
+        if (note.resolves && note.dissonance < 1)
+            return <Zap className={`${cls} text-purple-600`} />;
+        if (note.continues) {
+            if (note.momentum === "ascending")
+                return <TrendingUp className={`${cls} text-blue-600`} />;
+            if (note.momentum === "descending")
+                return <TrendingDown className={`${cls} text-blue-600`} />;
+            return <Minus className={`${cls} text-blue-600`} />;
+        }
+        return null;
     };
 
     const getChordFreqs = (root: string, type: string) => {
-        const rootNote = baseFreqs.find((n) => n.note === root);
-        if (!rootNote) return [];
-
-        const rootFreq = getFreq(rootNote.freq, 4, octave);
+        const r = baseFreqs.find((n) => n.note === root);
+        if (!r) return [];
+        const rootFreq = getFreq(r.freq, 4, octave);
         const third = type === "major" ? 4 : 3;
         const fifth = type === "diminished" ? 6 : 7;
-
         return [
             rootFreq,
             rootFreq * Math.pow(2, third / 12),
@@ -607,118 +748,115 @@ const PianoKeyboard = () => {
         ];
     };
 
-    const suggestedChords = getSuggestedChords();
-    const allChords = keyData[selectedKey].chords;
+    const getSuggestedChords = (): Chord[] => {
+        const all = keyData[selectedKey].chords;
+        if (recentNotes.length === 0) return all;
 
-    const getDotOpacity = (noteId: string) => {
-        const pos = noteHistory.lastIndexOf(noteId);
+        const last = recentNotes[recentNotes.length - 1];
+        const current = all.find((chord: Chord) => {
+            const cr = baseFreqs.find((n) => n.note === chord.root);
+            const ln = baseFreqs.find((n) => n.note === last.name);
+            if (!cr || !ln) return false;
+            const int = (ln.semitone - cr.semitone + 12) % 12;
+            if (chord.type === "major") return [0, 4, 7].includes(int);
+            if (chord.type === "minor") return [0, 3, 7].includes(int);
+            return [0, 3, 6].includes(int);
+        });
+
+        if (!current) return all;
+        const sugg = all.filter(
+            (c: Chord) =>
+                current.transitions?.includes(c.name) &&
+                c.name !== current.name,
+        );
+        return sugg.length > 0
+            ? sugg
+            : all.filter((c: Chord) => c.name !== current.name);
+    };
+
+    const getChordStrength = (name: string) => {
+        if (recentNotes.length === 0) return 1;
+        const last = recentNotes[recentNotes.length - 1];
+        const current = keyData[selectedKey].chords.find((chord: Chord) => {
+            const cr = baseFreqs.find((n) => n.note === chord.root);
+            const ln = baseFreqs.find((n) => n.note === last.name);
+            if (!cr || !ln) return false;
+            const int = (ln.semitone - cr.semitone + 12) % 12;
+            if (chord.type === "major") return [0, 4, 7].includes(int);
+            if (chord.type === "minor") return [0, 3, 7].includes(int);
+            return [0, 3, 6].includes(int);
+        });
+        return current?.strength?.[name] || 1;
+    };
+
+    const getChordStyle = (name: string) => {
+        const s = getChordStrength(name);
+        if (s === 3) return "bg-green-500";
+        if (s === 2) return "bg-green-400";
+        return "bg-green-300";
+    };
+
+    const suggestedChords = getSuggestedChords();
+
+    const getDotOpacity = (id: string) => {
+        const pos = noteHistory.lastIndexOf(id);
         if (pos === -1) return 0;
-        const recency = noteHistory.length - pos - 1;
-        return Math.max(0, 1 - recency * 0.125);
+        return Math.max(0, 1 - (noteHistory.length - pos - 1) * 0.125);
     };
 
     return (
-        <div
-            className="flex flex-col items-center justify-center min-h-screen p-4"
-            style={{
-                background: "linear-gradient(to bottom, #581c87, #312e81)",
-                minHeight: "100vh",
-                width: "100%",
-                margin: 0,
-                padding: "1rem",
-                boxSizing: "border-box",
-            }}
-        >
-            <a
-                href="/"
-                style={{
-                    position: "absolute",
-                    top: "1rem",
-                    left: "1rem",
-                    color: "white",
-                    textDecoration: "none",
-                    fontSize: "1rem",
-                    fontWeight: "500",
-                    padding: "0.5rem 1rem",
-                    borderRadius: "0.5rem",
-                    backgroundColor: "rgba(255, 255, 255, 0.1)",
-                    transition: "background-color 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.2)";
-                }}
-                onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor =
-                        "rgba(255, 255, 255, 0.1)";
-                }}
-            >
-                ← Home
-            </a>
-            <div className="mb-4 flex flex-col gap-3 items-center">
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-purple-900 to-indigo-900 p-4">
+            <div className="mb-3 flex flex-col gap-2 items-center relative">
+                {toast && (
+                    <div
+                        className={`absolute -top-16 px-6 py-3 rounded-full shadow-lg animate-bounce text-lg font-bold ${
+                            toast.color === "purple"
+                                ? "bg-purple-500 text-white"
+                                : toast.color === "green"
+                                ? "bg-green-500 text-white"
+                                : toast.color === "blue"
+                                ? "bg-blue-500 text-white"
+                                : toast.color === "orange"
+                                ? "bg-orange-500 text-white"
+                                : "bg-red-500 text-white"
+                        }`}
+                    >
+                        {toast.emoji} {toast.name}!
+                    </div>
+                )}
                 <div className="flex items-center gap-4">
                     <button
-                        onClick={() =>
-                            setOctave((prev) => Math.max(1, prev - 1))
-                        }
+                        onClick={() => setOctave((p) => Math.max(1, p - 1))}
                         disabled={octave <= 1}
                         className="p-2 bg-white rounded-lg disabled:opacity-30"
-                        style={{ color: "black" }}
                     >
-                        <ChevronLeft
-                            className="w-6 h-6"
-                            style={{ color: "black" }}
-                        />
+                        <ChevronLeft className="w-6 h-6" />
                     </button>
-                    <div
-                        className="text-xl font-bold min-w-32 text-center"
-                        style={{
-                            color: "white",
-                            textShadow: "2px 2px 4px rgba(0,0,0,0.5)",
-                        }}
-                    >
+                    <div className="text-white text-xl font-bold min-w-32 text-center">
                         Octave {octave}
                         {numOctaves > 1 && `-${octave + numOctaves - 1}`}
                     </div>
                     <button
-                        onClick={() =>
-                            setOctave((prev) => Math.min(7, prev + 1))
-                        }
+                        onClick={() => setOctave((p) => Math.min(7, p + 1))}
                         disabled={octave >= 7}
                         className="p-2 bg-white rounded-lg disabled:opacity-30"
-                        style={{ color: "black" }}
                     >
-                        <ChevronRight
-                            className="w-6 h-6"
-                            style={{ color: "black" }}
-                        />
+                        <ChevronRight className="w-6 h-6" />
                     </button>
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <label
-                        className="text-sm font-semibold"
-                        style={{ color: "white" }}
-                    >
+                    <label className="text-white text-sm font-semibold">
                         Key:
                     </label>
                     <select
                         value={selectedKey}
                         onChange={(e) => {
-                            setSelectedKey(
-                                e.target.value as
-                                    | "C"
-                                    | "G"
-                                    | "D"
-                                    | "F"
-                                    | "Am"
-                                    | "Em",
-                            );
-                            setLastPlayedNotes([]);
+                            setSelectedKey(e.target.value as KeyType);
+                            setRecentNotes([]);
                             setNoteHistory([]);
                         }}
                         className="px-3 py-2 rounded-lg font-semibold"
-                        style={{ backgroundColor: "white", color: "black" }}
                     >
                         <option value="C">C Major</option>
                         <option value="G">G Major</option>
@@ -729,21 +867,19 @@ const PianoKeyboard = () => {
                     </select>
 
                     <button
-                        onClick={() => setShowInScale(!showInScale)}
-                        className="px-3 py-2 rounded-lg font-semibold"
-                        style={{
-                            backgroundColor: showInScale
-                                ? "#60a5fa"
-                                : "#d1d5db",
-                            color: showInScale ? "#1e3a8a" : "#374151",
-                        }}
+                        onClick={() => setShowSmart(!showSmart)}
+                        className={`px-3 py-2 rounded-lg font-semibold ${
+                            showSmart
+                                ? "bg-blue-400 text-blue-900"
+                                : "bg-gray-300 text-gray-700"
+                        }`}
                     >
-                        Hints
+                        Smart
                     </button>
                 </div>
             </div>
 
-            <div className="relative mb-4 overflow-x-auto max-w-full">
+            <div className="relative mb-3 overflow-x-auto max-w-full">
                 <div className="flex">
                     {whiteKeys.map((note, idx) => {
                         const opacity = getDotOpacity(note.id);
@@ -761,8 +897,9 @@ const PianoKeyboard = () => {
                                     note,
                                 )}`}
                             >
+                                {getIcon(note)}
                                 <span className="block mt-auto mb-2 font-semibold text-sm">
-                                    {note.note}
+                                    {note.displayName}
                                 </span>
                                 {opacity > 0 && (
                                     <div
@@ -774,7 +911,6 @@ const PianoKeyboard = () => {
                         );
                     })}
                 </div>
-
                 <div className="absolute top-0 left-0 flex pointer-events-none">
                     {whiteKeys.map((wk, idx) => {
                         const bk = blackKeys.find(
@@ -782,12 +918,10 @@ const PianoKeyboard = () => {
                                 b.octave === wk.octave &&
                                 b.semitone === wk.semitone + 1,
                         );
-
                         if (!bk)
                             return (
                                 <div key={idx} className="w-16 flex-shrink-0" />
                             );
-
                         const opacity = getDotOpacity(bk.id);
                         return (
                             <div
@@ -806,8 +940,9 @@ const PianoKeyboard = () => {
                                         bk,
                                     )}`}
                                 >
+                                    {getIcon(bk)}
                                     <span className="block mt-auto mb-1 font-semibold text-xs">
-                                        {bk.note}
+                                        {bk.displayName}
                                     </span>
                                     {opacity > 0 && (
                                         <div
@@ -821,122 +956,99 @@ const PianoKeyboard = () => {
                     })}
                 </div>
             </div>
-
-            <div className="mb-4 w-full max-w-md">
-                <div
-                    className="text-xs font-semibold mb-2 text-center"
-                    style={{ color: "white" }}
-                >
-                    {lastPlayedNotes.length > 0
+            <div className="mb-3 w-full max-w-md">
+                <div className="text-white text-xs font-semibold mb-2 text-center">
+                    {recentNotes.length > 0
                         ? "Suggested (darker = stronger)"
                         : `Chords in ${selectedKey}`}
                 </div>
                 <div className="flex flex-wrap gap-2 justify-center">
-                    {suggestedChords.map((chord: any) => {
-                        const strength = getChordStrength(chord.name);
-                        const bgColor =
-                            strength === 3
-                                ? "#22c55e"
-                                : strength === 2
-                                ? "#4ade80"
-                                : "#86efac";
-                        return (
-                            <button
-                                key={chord.name}
-                                onClick={() =>
-                                    playChord(
-                                        getChordFreqs(chord.root, chord.type),
-                                        chord.name,
-                                    )
-                                }
-                                className="px-3 py-2 rounded-lg font-bold shadow-lg active:opacity-80 flex flex-col items-center min-w-16"
-                                style={{
-                                    background: `linear-gradient(to bottom, ${bgColor}, ${
-                                        strength === 3
-                                            ? "#16a34a"
-                                            : strength === 2
-                                            ? "#22c55e"
-                                            : "#4ade80"
-                                    })`,
-                                    color: "#14532d",
-                                }}
-                            >
-                                <Music
-                                    className="w-4 h-4"
-                                    style={{ color: "#14532d" }}
-                                />
-                                <span
-                                    className="text-sm"
-                                    style={{
-                                        color: "#14532d",
-                                        fontWeight: "bold",
-                                    }}
-                                >
-                                    {chord.name}
-                                </span>
-                                <span
-                                    className="text-xs"
-                                    style={{ color: "#14532d", opacity: 0.8 }}
-                                >
-                                    {chord.degree}
-                                </span>
-                            </button>
-                        );
-                    })}
+                    {suggestedChords.map((chord) => (
+                        <button
+                            key={chord.name}
+                            onClick={() =>
+                                playChord(
+                                    getChordFreqs(chord.root, chord.type),
+                                    chord.name,
+                                )
+                            }
+                            className={`px-3 py-2 ${getChordStyle(
+                                chord.name,
+                            )} text-green-900 rounded-lg font-bold shadow-lg active:opacity-80 flex flex-col items-center min-w-16`}
+                        >
+                            <Music className="w-4 h-4" />
+                            <span className="text-sm">{chord.name}</span>
+                            <span className="text-xs opacity-70">
+                                {chord.degree}
+                            </span>
+                        </button>
+                    ))}
                 </div>
-                {lastPlayedNotes.length > 0 &&
-                    suggestedChords.length < allChords.length && (
+                {recentNotes.length > 0 &&
+                    suggestedChords.length <
+                        keyData[selectedKey].chords.length && (
                         <button
                             onClick={() => {
-                                setLastPlayedNotes([]);
+                                setRecentNotes([]);
                                 setNoteHistory([]);
                             }}
-                            className="mt-2 text-xs underline w-full text-center"
-                            style={{
-                                color: "rgba(255, 255, 255, 0.9)",
-                                textShadow: "1px 1px 2px rgba(0,0,0,0.5)",
-                                backgroundColor: "rgba(0, 0, 0, 0.2)",
-                                padding: "4px 8px",
-                                borderRadius: "4px",
-                            }}
+                            className="mt-2 text-white text-xs underline opacity-70 w-full text-center"
                         >
                             Show all chords
                         </button>
                     )}
             </div>
-
-            {showInScale && (
+            {showSmart && (
                 <div className="text-center max-w-md bg-white bg-opacity-10 px-4 py-3 rounded-lg">
-                    {lastPlayedNotes.length > 0 ? (
-                        <div className="text-sm">
-                            <div
-                                className="font-semibold mb-1"
-                                style={{ color: "#fef08a" }}
-                            >
+                    {recentNotes.length > 0 ? (
+                        <div className="text-sm space-y-1">
+                            <div className="text-yellow-200 font-semibold">
                                 Playing:{" "}
-                                {lastPlayedNotes
-                                    .map((n) => n.split("-")[0])
+                                {recentNotes
+                                    .slice(-3)
+                                    .map((n) => n.name)
                                     .join(", ")}
                             </div>
-                            <div style={{ color: "#86efac" }}>
-                                Darker green = stronger resolution
+                            <div className="flex items-center justify-center gap-3 text-xs mt-2">
+                                <div className="flex items-center gap-1">
+                                    <div className="w-3 h-3 bg-red-500 rounded"></div>
+                                    <span className="text-red-200">
+                                        Dissonant
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <div className="w-3 h-3 bg-green-500 rounded"></div>
+                                    <span className="text-green-200">
+                                        Consonant
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <Zap className="w-3 h-3 text-purple-400" />
+                                    <span className="text-purple-200">
+                                        Resolves
+                                    </span>
+                                </div>
                             </div>
-                            <div
-                                className="text-xs mt-1"
-                                style={{ color: "#93c5fd" }}
-                            >
-                                Blue = all notes in {selectedKey}
-                            </div>
-                            <div
-                                className="text-xs mt-1"
-                                style={{ color: "rgba(255, 255, 255, 0.8)" }}
-                            >
-                                Dots = recent notes (fade over time)
+                            <div className="flex items-center justify-center gap-3 text-xs">
+                                <div className="flex items-center gap-1">
+                                    <TrendingUp className="w-3 h-3 text-blue-400" />
+                                    <span className="text-blue-200">Up</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <TrendingDown className="w-3 h-3 text-blue-400" />
+                                    <span className="text-blue-200">Down</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <Minus className="w-3 h-3 text-blue-400" />
+                                    <span className="text-blue-200">
+                                        Static
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     ) : (
-                        <div className="text-sm" style={{ color: "#93c5fd" }}>
-                            Play notes/chords for smart suggestions!
+                        <div className="text-blue-200 text-sm">
+                            Play notes to see context-aware suggestions!
                         </div>
                     )}
                 </div>
